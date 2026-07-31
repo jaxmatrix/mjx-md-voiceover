@@ -11,7 +11,7 @@
 - [x] Adapt `AGENTS.md`, `CLAUDE.md`, and `CONTRIBUTING.md` from `mjx-ooxml-rs`.
 - [x] Document system architecture (`docs/ARCHITECTURE.md`), plugin spec (`docs/PLUGIN_SPEC.md`), and voiceover translation guidelines (`docs/VOICEOVER_RULES.md`).
 - [x] Establish strict sub-10ms performance budget and WASM compatibility guarantees.
-- [ ] Align with project stakeholders on development plan before code implementation.
+- [x] Align with project stakeholders on development plan before code implementation.
 
 ### Phase 2: Core AST Parser & Voice Text Generator (`mjx-md-voiceover-core`)
 - [ ] Define Markdown Voice AST node hierarchy (`VoiceAst`, `VoiceNode`, `SpeechToken`).

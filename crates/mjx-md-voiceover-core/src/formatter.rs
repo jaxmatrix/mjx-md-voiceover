@@ -31,11 +31,50 @@ impl SpeechFormatter {
     /// # Performance
     /// Pre-allocates string buffer based on AST node depth to minimize dynamic re-allocations.
     pub fn format(ast: &VoiceAst) -> String {
+        let registry = crate::plugin::PluginRegistry::new();
+        Self::format_with_registry(ast, &registry)
+    }
+
+    /// Renders a `VoiceAst` with plugin transformations applied via `PluginRegistry`.
+    pub fn format_with_registry(ast: &VoiceAst, registry: &crate::plugin::PluginRegistry) -> String {
         let mut out = String::with_capacity(256);
+        let mut context = crate::ast::TransformContext::default();
         for node in &ast.nodes {
-            Self::format_node(node, &mut out);
+            Self::format_node_with_registry(node, registry, &mut context, &mut out);
         }
         out.trim().to_string()
+    }
+
+    fn format_node_with_registry(
+        node: &VoiceAstNode,
+        registry: &crate::plugin::PluginRegistry,
+        context: &mut crate::ast::TransformContext,
+        out: &mut String,
+    ) {
+        if let Some(token) = registry.transform_node(node, context) {
+            match token {
+                crate::ast::SpeechToken::Text(text) | crate::ast::SpeechToken::CustomSpeech(text) => {
+                    if !out.is_empty() && !out.ends_with(' ') {
+                        out.push(' ');
+                    }
+                    out.push_str(text);
+                    Self::ensure_period(out);
+                    return;
+                }
+                crate::ast::SpeechToken::VerbalizedCode { language: _, summary } => {
+                    if !out.is_empty() && !out.ends_with(' ') {
+                        out.push(' ');
+                    }
+                    out.push_str(summary);
+                    Self::ensure_period(out);
+                    return;
+                }
+                crate::ast::SpeechToken::Pause(_) | crate::ast::SpeechToken::EmphasisCue(_) => {
+                    return;
+                }
+            }
+        }
+        Self::format_node(node, out);
     }
 
     fn format_node(node: &VoiceAstNode, out: &mut String) {

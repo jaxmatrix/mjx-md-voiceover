@@ -7,10 +7,12 @@
 //! Designed for sub-millisecond execution (<1-10 ms SLA) and full WebAssembly (`wasm32-unknown-unknown`) safety.
 
 pub mod ast;
+pub mod parser;
 
 pub use ast::{
     EmphasisType, PauseDuration, SpeechToken, TransformContext, VoiceAst, VoiceAstNode,
 };
+pub use parser::VoiceAstParser;
 
 /// Engine error types.
 #[derive(Debug, thiserror::Error)]

@@ -112,7 +112,7 @@ def generate_voiceover(markdown_text: str) -> str:
         return " ".join(lines)
 
 def generate_clean_audio_sample(text: str) -> bytes:
-    """Generates a soft PCM WAV sample preview."""
+    """Generates a soft pulsed preview if WAV file is not yet on disk."""
     words = text.split()
     duration_sec = max(1.5, min(10.0, len(words) * 0.35))
     sample_rate = 24000
@@ -121,8 +121,12 @@ def generate_clean_audio_sample(text: str) -> bytes:
     data = bytearray()
     for i in range(num_samples):
         t = i / sample_rate
-        amplitude = 5000 * math.exp(-t / (duration_sec * 0.8))
-        sample = int(amplitude * math.sin(2 * math.pi * 440.0 * t))
+        word_phase = math.sin(2 * math.pi * 3.0 * t)
+        if word_phase > 0.3:
+            amplitude = 600 * math.sin(2 * math.pi * 220.0 * t)
+        else:
+            amplitude = 0
+        sample = int(amplitude)
         data.extend(struct.pack('<h', max(-32768, min(32767, sample))))
         
     wav_bytes = bytearray()

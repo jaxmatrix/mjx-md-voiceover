@@ -22,8 +22,28 @@ ROOT_DIR = Path(__file__).resolve().parent.parent
 EVAL_PAIRS_FILE = ROOT_DIR / "eval_pairs" / "dataset_eval_pairs.json"
 AUDIO_OUT_DIR = ROOT_DIR / "eval_pairs" / "audio_outputs"
 
-def synthesize_text(pipeline, text: str, voice: str = 'af_sarah') -> tuple[float, float, str]:
-    """Synthesizes text audio with Kokoro TTS, returns (audio_duration_sec, tts_computation_sec, engine_name)."""
+def write_fallback_wav(filename: Path, duration_sec: float, sample_rate: int = 24000):
+    """Writes a gentle audio preview if PyTorch Kokoro engine is unavailable."""
+    num_samples = int(sample_rate * duration_sec)
+    with wave.open(str(filename), 'w') as wav_file:
+        wav_file.setnchannels(1)
+        wav_file.setsampwidth(2)
+        wav_file.setframerate(sample_rate)
+        data = bytearray()
+        for i in range(num_samples):
+            t = i / sample_rate
+            # Speech cadence pulses (short gentle tones with silence between words)
+            word_phase = math.sin(2 * math.pi * 3.0 * t)
+            if word_phase > 0.3:
+                amplitude = 600 * math.sin(2 * math.pi * 220.0 * t)
+            else:
+                amplitude = 0
+            sample = int(amplitude)
+            data.extend(struct.pack('<h', max(-32768, min(32767, sample))))
+        wav_file.writeframes(data)
+
+def synthesize_and_save_audio(pipeline, text: str, output_path: Path, voice: str = 'af_sarah') -> tuple[float, float, str]:
+    """Synthesizes text audio with Kokoro TTS, saves WAV file, returns (audio_duration_sec, tts_computation_sec, engine_name)."""
     start_time = time.perf_counter()
     
     if pipeline is not None:
@@ -33,34 +53,23 @@ def synthesize_text(pipeline, text: str, voice: str = 'af_sarah') -> tuple[float
             generator = pipeline(text, voice=voice, speed=1.0, split_pattern=r'\n+')
             audio_parts = []
             for _, _, audio in generator:
-                audio_parts.append(audio)
-            full_audio = np.concatenate(audio_parts)
-            compute_sec = time.perf_counter() - start_time
-            audio_duration_sec = len(full_audio) / 24000.0
-            return audio_duration_sec, compute_sec, "Kokoro-PyTorch"
+                if audio is not None and len(audio) > 0:
+                    audio_parts.append(audio)
+            if audio_parts:
+                full_audio = np.concatenate(audio_parts)
+                compute_sec = time.perf_counter() - start_time
+                audio_duration_sec = len(full_audio) / 24000.0
+                sf.write(str(output_path), full_audio, 24000)
+                return audio_duration_sec, compute_sec, "Kokoro-PyTorch"
         except Exception as e:
-            print(f"    Synthesis warning ({e}), using fallback audio model...")
+            print(f"    Synthesis warning for {output_path.name} ({e}), using fallback audio generator...")
             
-    # Fallback constant-volume audio synthesis
+    # Fallback audio synthesis if pipeline fails
     words = text.split()
     audio_duration_sec = max(1.5, len(words) * 0.35)
     compute_sec = time.perf_counter() - start_time
+    write_fallback_wav(output_path, audio_duration_sec)
     return audio_duration_sec, compute_sec, "Fallback-PCM"
-
-def write_wav(filename: Path, duration_sec: float, sample_rate: int = 24000):
-    """Writes a clean PCM WAV audio file."""
-    num_samples = int(sample_rate * duration_sec)
-    with wave.open(str(filename), 'w') as wav_file:
-        wav_file.setnchannels(1)
-        wav_file.setsampwidth(2)
-        wav_file.setframerate(sample_rate)
-        data = bytearray()
-        for i in range(num_samples):
-            t = i / sample_rate
-            amplitude = 5000 * math.exp(-t / (duration_sec * 0.8))
-            sample = int(amplitude * math.sin(2 * math.pi * 440.0 * t))
-            data.extend(struct.pack('<h', max(-32768, min(32767, sample))))
-        wav_file.writeframes(data)
 
 def main():
     if not EVAL_PAIRS_FILE.exists():
@@ -99,13 +108,11 @@ def main():
         
         # 1. Synthesize Raw Markdown TTS
         raw_wav_file = AUDIO_OUT_DIR / f"{pair_id}_raw_markdown_tts.wav"
-        raw_dur, raw_tts_sec, engine = synthesize_text(pipeline, raw_md)
-        write_wav(raw_wav_file, raw_dur)
+        raw_dur, raw_tts_sec, engine = synthesize_and_save_audio(pipeline, raw_md, raw_wav_file)
         
         # 2. Synthesize Parsed Voiceover TTS
         parsed_wav_file = AUDIO_OUT_DIR / f"{pair_id}_parsed_voiceover_tts.wav"
-        parsed_dur, parsed_tts_sec, _ = synthesize_text(pipeline, parsed_text)
-        write_wav(parsed_wav_file, parsed_dur)
+        parsed_dur, parsed_tts_sec, _ = synthesize_and_save_audio(pipeline, parsed_text, parsed_wav_file)
         
         # Calculate TTS synthesis time saved & speedup
         tts_time_saved_sec = max(0.0, raw_tts_sec - parsed_tts_sec)
@@ -121,6 +128,7 @@ def main():
         updated_pairs.append(pair)
         
         print(f"[{i}/{len(pairs)}] {title} ({pair_id})")
+        print(f"  Engine:                       {engine}")
         print(f"  Raw Markdown TTS Compute:     {raw_tts_sec:.4f} sec | Audio Dur: {raw_dur:.2f} s")
         print(f"  Parsed Voiceover TTS Compute: {parsed_tts_sec:.4f} sec | Audio Dur: {parsed_dur:.2f} s")
         print(f"  ⚡ TTS Synthesis Time Saved:   {tts_time_saved_sec:.4f} sec ({tts_speedup_pct:+.1f}% compute speedup)")

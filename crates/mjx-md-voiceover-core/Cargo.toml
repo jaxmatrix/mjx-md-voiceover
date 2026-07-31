@@ -16,3 +16,7 @@ serde.workspace = true
 
 [dev-dependencies]
 criterion = "0.5"
+
+[[bench]]
+name = "voiceover_bench"
+harness = false

@@ -11,4 +11,9 @@ description = "Plugin ecosystem for mjx-md-voiceover."
 
 [dependencies]
 mjx-md-voiceover-core = { path = "../mjx-md-voiceover-core" }
+mjx-md-voiceover-plugin-latex = { path = "../plugins/mjx-md-voiceover-plugin-latex" }
+mjx-md-voiceover-plugin-code = { path = "../plugins/mjx-md-voiceover-plugin-code" }
+mjx-md-voiceover-plugin-mermaid = { path = "../plugins/mjx-md-voiceover-plugin-mermaid" }
+mjx-md-voiceover-plugin-admonition = { path = "../plugins/mjx-md-voiceover-plugin-admonition" }
+mjx-md-voiceover-plugin-table = { path = "../plugins/mjx-md-voiceover-plugin-table" }
 serde.workspace = true

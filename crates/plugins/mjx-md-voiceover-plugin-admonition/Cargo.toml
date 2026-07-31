@@ -1,0 +1,13 @@
+[package]
+name = "mjx-md-voiceover-plugin-admonition"
+version.workspace = true
+edition.workspace = true
+authors.workspace = true
+license.workspace = true
+repository.workspace = true
+keywords.workspace = true
+categories.workspace = true
+description = "Callout box auditory alert cue plugin for mjx-md-voiceover."
+
+[dependencies]
+mjx-md-voiceover-core = { path = "../../../crates/mjx-md-voiceover-core" }

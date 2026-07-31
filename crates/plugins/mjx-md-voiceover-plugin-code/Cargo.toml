@@ -1,0 +1,13 @@
+[package]
+name = "mjx-md-voiceover-plugin-code"
+version.workspace = true
+edition.workspace = true
+authors.workspace = true
+license.workspace = true
+repository.workspace = true
+keywords.workspace = true
+categories.workspace = true
+description = "Code block fence verbalizer plugin for mjx-md-voiceover."
+
+[dependencies]
+mjx-md-voiceover-core = { path = "../../../crates/mjx-md-voiceover-core" }

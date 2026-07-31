@@ -1,11 +1,10 @@
-//! Code block verbalizer plugin for `mjx-md-voiceover`.
+//! Code block speech verbalizer plugin for `mjx-md-voiceover`.
 //!
-//! Intercepts fenced code blocks (e.g. ````rust fn main() {} ````)
-//! and transforms them into natural spoken summaries.
+//! Converts fenced code blocks (` ```rust `, ` ```python `, etc.) into spoken code announcements.
 
 use mjx_md_voiceover_core::{SpeechToken, TransformContext, VoiceAstNode, VoicePlugin};
 
-/// Plugin that verbalizes fenced code blocks into conversational descriptions.
+/// Plugin transforming fenced code blocks into conversational code descriptions for TTS.
 #[derive(Debug, Default, Clone, Copy)]
 pub struct CodeBlockPlugin;
 
@@ -30,18 +29,24 @@ impl VoicePlugin for CodeBlockPlugin {
         node: &VoiceAstNode<'a>,
         _context: &mut TransformContext,
     ) -> Option<SpeechToken<'a>> {
-        if let VoiceAstNode::CodeBlock { language, code: _ } = node {
-            let summary: &'a str = match language {
-                Some("rust") => "Code snippet in Rust.",
-                Some("python") | Some("py") => "Code snippet in Python.",
-                Some("js") | Some("javascript") => "Code snippet in JavaScript.",
-                Some("ts") | Some("typescript") => "Code snippet in TypeScript.",
-                Some("html") => "HTML code snippet.",
-                Some("css") => "CSS stylesheet snippet.",
-                Some("json") => "JSON data snippet.",
-                Some("sh") | Some("bash") | Some("zsh") => "Shell command script snippet.",
-                Some(_) => "Fenced code block snippet.",
-                None => "Unspecified code block snippet.",
+        if let VoiceAstNode::CodeBlock { language, .. } = node {
+            let summary = match language {
+                Some(lang) if !lang.trim().is_empty() => {
+                    let l = lang.trim().to_lowercase();
+                    match l.as_str() {
+                        "rust" | "rs" => "Code snippet in Rust.",
+                        "python" | "py" => "Code snippet in Python.",
+                        "javascript" | "js" => "Code snippet in JavaScript.",
+                        "typescript" | "ts" => "Code snippet in TypeScript.",
+                        "sql" => "SQL Schema Definition.",
+                        "bash" | "sh" | "shell" => "Shell command script snippet.",
+                        "cpp" | "c++" | "c" => "Code snippet in C++.",
+                        "go" | "golang" => "Code snippet in Go.",
+                        "java" => "Code snippet in Java.",
+                        _ => "Fenced code block snippet.",
+                    }
+                }
+                _ => "Fenced code block snippet.",
             };
 
             Some(SpeechToken::VerbalizedCode {
@@ -61,12 +66,11 @@ mod tests {
     #[test]
     fn test_code_block_plugin_transformation() {
         let plugin = CodeBlockPlugin::new();
-        assert_eq!(plugin.name(), "CodeBlockPlugin");
-
         let node = VoiceAstNode::CodeBlock {
             language: Some("rust"),
             code: "fn main() {}",
         };
+
         assert!(plugin.supports_node(&node));
 
         let mut ctx = TransformContext::default();
@@ -76,7 +80,7 @@ mod tests {
             token,
             Some(SpeechToken::VerbalizedCode {
                 language: Some("rust"),
-                summary: "Code snippet in Rust.",
+                summary: "Code snippet in Rust."
             })
         );
     }

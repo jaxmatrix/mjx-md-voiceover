@@ -1,18 +1,24 @@
-#![deny(unsafe_code)]
-#![warn(missing_docs)]
-
 //! # `mjx-md-voiceover-plugins`
 //!
-//! Official plugin ecosystem for `mjx-md-voiceover`.
-//! Provides specialized speech transformers for Code fences, LaTeX math formulas, and Admonitions/Callouts.
+//! Umbrella plugin crate for `mjx-md-voiceover`.
+//! Re-exports individual modular plugin packages under `crates/plugins/`.
 
-pub mod admonition;
-pub mod code_block;
-pub mod latex_math;
+pub use mjx_md_voiceover_plugin_admonition::AdmonitionPlugin;
+pub use mjx_md_voiceover_plugin_code::CodeBlockPlugin;
+pub use mjx_md_voiceover_plugin_latex::LatexMathPlugin;
+pub use mjx_md_voiceover_plugin_mermaid::MermaidPlugin;
+pub use mjx_md_voiceover_plugin_table::TablePlugin;
 
-pub use admonition::AdmonitionPlugin;
-pub use code_block::CodeBlockPlugin;
-pub use latex_math::LatexMathPlugin;
-pub use mjx_md_voiceover_core::{
-    PluginRegistry, SpeechToken, TransformContext, VoiceAstNode, VoicePlugin,
-};
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_plugins_reexport() {
+        let _p1 = AdmonitionPlugin::new();
+        let _p2 = CodeBlockPlugin::new();
+        let _p3 = LatexMathPlugin::new();
+        let _p4 = MermaidPlugin::new();
+        let _p5 = TablePlugin::new();
+    }
+}

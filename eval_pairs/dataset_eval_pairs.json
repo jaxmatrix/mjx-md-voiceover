@@ -1,8 +1,8 @@
 {
   "dataset_version": "1.0.0",
   "total_pairs": 5,
-  "average_char_readout_ratio": 0.868,
-  "average_word_readout_ratio": 0.817,
+  "average_char_readout_ratio": 0.867,
+  "average_word_readout_ratio": 0.816,
   "pairs": [
     {
       "id": "admonitions_mixed",
@@ -20,13 +20,13 @@
       "id": "code_heavy",
       "name": "CODE HEAVY",
       "input_markdown": "# System Architecture & API Reference\n\nThis document describes the high-performance async runtime and database integration.\n\n## Installation\n\nRun the following command to install the package:\n\n```bash\ncargo add mjx-md-voiceover --features full\nnpm install @mjx/md-voiceover\npip install mjx-md-voiceover\n```\n\n## Rust Implementation\n\n```rust\nuse std::sync::Arc;\n\npub struct VoiceEngine {\n    buffer_size: usize,\n}\n\nimpl VoiceEngine {\n    pub fn new(capacity: usize) -> Self {\n        Self { buffer_size: capacity }\n    }\n\n    pub fn process_stream(&self, input: &str) -> String {\n        format!(\"Processed: {}\", input)\n    }\n}\n```\n\n## Python Integration\n\n```python\nimport asyncio\nfrom mjx_md_voiceover import VoiceEngine\n\nasync def main():\n    engine = VoiceEngine(capacity=1024)\n    result = await engine.process_async(\"# Hello\")\n    print(f\"Result: {result}\")\n\nif __name__ == \"__main__\":\n    asyncio.run(main())\n```\n\n## SQL Schema Definition\n\n```sql\nCREATE TABLE voice_sessions (\n    session_id UUID PRIMARY KEY DEFAULT gen_random_uuid(),\n    created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),\n    markdown_bytes INT NOT NULL,\n    latency_ms NUMERIC(6, 3) NOT NULL\n);\n```\n\nUse `engine.process_stream(&data)` inside your main thread loop.\n",
-      "output_voiceover_text": "Heading: System Architecture & API Reference. This document describes the high-performance async runtime and database integration. Section: Installation. Run the following command to install the package:. Shell command script snippet. Section: Rust Implementation. Code snippet in Rust. Section: Python Integration. Code snippet in Python. Section: SQL Schema Definition. Fenced code block snippet. Use engine.process_stream(&data) inside your main thread loop.",
+      "output_voiceover_text": "Heading: System Architecture & API Reference. This document describes the high-performance async runtime and database integration. Section: Installation. Run the following command to install the package:. Shell command script snippet. Section: Rust Implementation. Code snippet in Rust. Section: Python Integration. Code snippet in Python. Section: SQL Schema Definition. SQL Schema Definition. Use engine.process_stream(&data) inside your main thread loop.",
       "input_char_count": 1239,
-      "output_char_count": 461,
+      "output_char_count": 457,
       "input_word_count": 151,
-      "output_word_count": 59,
-      "readout_char_ratio": 0.372,
-      "readout_word_ratio": 0.391
+      "output_word_count": 58,
+      "readout_char_ratio": 0.369,
+      "readout_word_ratio": 0.384
     },
     {
       "id": "math_heavy",

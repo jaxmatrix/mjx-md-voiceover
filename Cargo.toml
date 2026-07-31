@@ -3,6 +3,11 @@ resolver = "2"
 members = [
     "crates/mjx-md-voiceover-core",
     "crates/mjx-md-voiceover-plugins",
+    "crates/plugins/mjx-md-voiceover-plugin-latex",
+    "crates/plugins/mjx-md-voiceover-plugin-code",
+    "crates/plugins/mjx-md-voiceover-plugin-mermaid",
+    "crates/plugins/mjx-md-voiceover-plugin-admonition",
+    "crates/plugins/mjx-md-voiceover-plugin-table",
     "crates/mjx-md-voiceover-wasm",
     "crates/mjx-md-voiceover-py",
 ]

@@ -4,3 +4,8 @@
 //! # `mjx-md-voiceover-plugins`
 //!
 //! Official plugin ecosystem for `mjx-md-voiceover`.
+//! Provides specialized speech transformers for Code fences, LaTeX math formulas, and Admonitions/Callouts.
+
+pub use mjx_md_voiceover_core::{
+    PluginRegistry, SpeechToken, TransformContext, VoiceAstNode, VoicePlugin,
+};

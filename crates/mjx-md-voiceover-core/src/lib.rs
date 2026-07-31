@@ -9,12 +9,14 @@
 pub mod ast;
 pub mod formatter;
 pub mod parser;
+pub mod plugin;
 
 pub use ast::{
     EmphasisType, PauseDuration, SpeechToken, TransformContext, VoiceAst, VoiceAstNode,
 };
 pub use formatter::SpeechFormatter;
 pub use parser::VoiceAstParser;
+pub use plugin::{PluginRegistry, VoicePlugin};
 
 /// Convenient top-level helper function to parse Markdown into natural speech text.
 pub fn parse_and_format(markdown: &str) -> Result<String> {

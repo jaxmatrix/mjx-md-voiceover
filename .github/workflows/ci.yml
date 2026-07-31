@@ -1,0 +1,47 @@
+name: CI
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+env:
+  CARGO_TERM_COLOR: always
+
+jobs:
+  check-and-test:
+    name: Build, Test & Lint
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install Rust Toolchain
+        uses: dtolnay/rust-toolchain@stable
+        with:
+          targets: wasm32-unknown-unknown
+          components: clippy, rustfmt
+
+      - name: Cache Cargo Dependencies
+        uses: Swatinem/rust-cache@v2
+
+      - name: Verify Code Formatting
+        run: cargo fmt --all -- --check
+
+      - name: Workspace Cargo Check
+        run: cargo check --workspace
+
+      - name: Workspace Cargo Test
+        run: cargo test --workspace
+
+      - name: Workspace Clippy Audit
+        run: cargo clippy --workspace --all-targets -- -D warnings
+
+      - name: Core WASM Target Check
+        run: cargo check -p mjx-md-voiceover-core --target wasm32-unknown-unknown
+
+      - name: Plugins WASM Target Check
+        run: cargo check -p mjx-md-voiceover-plugins --target wasm32-unknown-unknown
+
+      - name: Core Microbenchmarks Check
+        run: cargo check -p mjx-md-voiceover-core --benches

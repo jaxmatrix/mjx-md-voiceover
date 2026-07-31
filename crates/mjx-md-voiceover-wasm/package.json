@@ -1,0 +1,25 @@
+{
+  "name": "@mjx/md-voiceover",
+  "version": "0.1.0",
+  "description": "Ultra-fast, WASM-compliant Markdown to Voiceover speech conversion engine.",
+  "main": "mjx_md_voiceover_wasm.js",
+  "types": "index.d.ts",
+  "files": [
+    "mjx_md_voiceover_wasm_bg.wasm",
+    "mjx_md_voiceover_wasm.js",
+    "index.d.ts"
+  ],
+  "keywords": [
+    "markdown",
+    "tts",
+    "voiceover",
+    "speech",
+    "wasm",
+    "ast"
+  ],
+  "license": "MIT OR Apache-2.0",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/mjx/mjx-md-voiceover"
+  }
+}

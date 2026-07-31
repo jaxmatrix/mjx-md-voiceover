@@ -22,7 +22,7 @@ except ImportError:
 
 # Page configuration
 st.set_page_config(
-    page_title="mjx-md-voiceover | Speech Engine Evaluator",
+    page_title="mjx-md-voiceover | Side-by-Side Speech Evaluator",
     page_icon="🎙️",
     layout="wide",
     initial_sidebar_state="expanded",
@@ -37,13 +37,6 @@ st.markdown("""
     }
     .stApp {
         background-color: #0F172A;
-    }
-    .metric-card {
-        background: linear-gradient(135deg, #1E293B 0%, #0F172A 100%);
-        border: 1px solid #334155;
-        border-radius: 12px;
-        padding: 20px;
-        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
     }
     .badge-success {
         background-color: #059669;
@@ -122,15 +115,15 @@ def generate_wav_audio(text: str) -> bytes:
     return bytes(wav_bytes)
 
 # Title & Header
-st.title("🎙️ mjx-md-voiceover | Speech Engine Evaluator")
-st.markdown("Ultra-fast, WASM-compliant Markdown to Voiceover Speech Engine Evaluation Dashboard.")
+st.title("🎙️ mjx-md-voiceover | Side-by-Side Speech Evaluator")
+st.markdown("Compare raw Markdown input vs converted voiceover speech text, check readout ratios, and press ▶️ **Play** to listen to the generated speech audio.")
 
 if NATIVE_ENGINE_LOADED:
     st.sidebar.markdown('<span class="badge-success">✓ Native C-Extension Active</span>', unsafe_allow_html=True)
 else:
     st.sidebar.markdown('<span class="badge-info">ℹ️ Fallback Speech Engine Active</span>', unsafe_allow_html=True)
 
-st.sidebar.header("🎛️ Evaluation Controls")
+st.sidebar.header("🎛️ Preset Dataset Selector")
 
 # Dataset presets
 dataset_pairs = {}
@@ -141,13 +134,15 @@ if EVAL_PAIRS_FILE.exists():
             dataset_pairs[pair["name"]] = pair
 
 sample_options = ["Custom Input"] + list(dataset_pairs.keys())
-selected_sample = st.sidebar.selectbox("Select Markdown Preset:", sample_options)
+selected_sample = st.sidebar.selectbox("Choose Evaluation Preset:", sample_options)
 
-default_markdown = "# Welcome to Voiceover Engine\n\n- Convert **Markdown** syntax into *natural speech*.\n- Sub-10ms performance budget.\n\n> [!NOTE]\n> Ready for Kokoro TTS audio synthesis."
+default_markdown = "# Welcome to Voiceover Engine\n\n- Convert **Markdown** syntax into *natural speech*.\n- Sub-10ms performance budget.\n\n> [!NOTE]\n> Press play button to listen."
+pair_id = None
 
 if selected_sample != "Custom Input" and selected_sample in dataset_pairs:
     preset_data = dataset_pairs[selected_sample]
     default_markdown = preset_data["input_markdown"]
+    pair_id = preset_data["id"]
 
 # Sidebar plugin toggles
 st.sidebar.subheader("🔌 Active Plugins")
@@ -155,12 +150,13 @@ enable_code = st.sidebar.checkbox("CodeBlockPlugin", value=True)
 enable_math = st.sidebar.checkbox("LatexMathPlugin", value=True)
 enable_admonitions = st.sidebar.checkbox("AdmonitionPlugin", value=True)
 
-# Main editor layout
+# Main Side-by-Side Layout
 col1, col2 = st.columns(2)
 
 with col1:
     st.subheader("📝 Raw Markdown Input")
-    markdown_input = st.text_area("Input Markdown Text:", value=default_markdown, height=350)
+    markdown_input = st.text_area("Input Markdown Syntax:", value=default_markdown, height=350)
+    st.caption(f"Input Length: **{len(markdown_input)}** characters | **{len(markdown_input.split())}** words")
 
 # Convert speech and measure latency
 start_time = time.perf_counter()
@@ -178,17 +174,32 @@ word_ratio = (out_words / in_words) if in_words > 0 else 1.0
 compression_pct = ((1.0 - char_ratio) * 100.0)
 
 with col2:
-    st.subheader("🗣️ Natural Voiceover Speech Output")
-    st.text_area("Spoken Voice Text (Sent to TTS):", value=voiceover_output, height=350)
+    st.subheader("🗣️ Converted Voiceover Speech Output")
+    st.text_area("Generated Spoken Text (Sent to TTS Engine):", value=voiceover_output, height=270)
+    st.caption(f"Output Length: **{out_chars}** characters | **{out_words}** words")
 
-# Metrics Row
+    st.markdown("##### 🔊 Listen to Voice Audio")
+    
+    # Check if pre-generated audio file exists
+    audio_file_path = AUDIO_OUT_DIR / f"{pair_id}_kokoro_voice.wav" if pair_id else None
+    if audio_file_path and audio_file_path.exists():
+        with open(audio_file_path, "rb") as f:
+            audio_bytes = f.read()
+        st.caption("🎧 Playing Kokoro TTS audio (`af_sarah` voice):")
+        st.audio(audio_bytes, format="audio/wav")
+    else:
+        audio_bytes = generate_wav_audio(voiceover_output)
+        st.caption("🎧 Playing synthetic speech audio sample:")
+        st.audio(audio_bytes, format="audio/wav")
+
+# Live Metrics Row
 st.markdown("---")
-st.subheader("📊 Live Evaluation Metrics")
+st.subheader("📊 Readout Ratio & Latency Metrics")
 
 m1, m2, m3, m4 = st.columns(4)
 
 with m1:
-    st.metric("Conversion Latency", f"{elapsed_ms:.3f} ms", delta="<10ms SLA Target", delta_color="normal")
+    st.metric("Conversion Latency", f"{elapsed_ms:.3f} ms", delta="<10ms SLA Budget Target", delta_color="normal")
 with m2:
     st.metric("Character Readout Ratio", f"{char_ratio:.3f}", delta=f"{in_chars} → {out_chars} chars")
 with m3:
@@ -196,17 +207,10 @@ with m3:
 with m4:
     st.metric("Syntax Compression", f"{compression_pct:+.1f}%", delta="Noise Reduction")
 
-# Audio Playback Player
-st.markdown("---")
-st.subheader("🎧 Voiceover Audio Preview")
-
-audio_bytes = generate_wav_audio(voiceover_output)
-st.audio(audio_bytes, format="audio/wav")
-
 # Dataset Benchmark Summary Matrix Table
 if dataset_pairs:
     st.markdown("---")
-    st.subheader("📈 Dataset Readout Ratio Summary Matrix")
+    st.subheader("📈 Dataset Benchmark Readout Matrix")
     
     table_data = []
     for pair_name, pair in dataset_pairs.items():
@@ -222,4 +226,4 @@ if dataset_pairs:
     st.dataframe(table_data, use_container_width=True)
 
 st.markdown("---")
-st.caption("`mjx-md-voiceover` evaluation app built with Streamlit • Pure Rust, WASM-compliant speech engine.")
+st.caption("`mjx-md-voiceover` evaluation app built with Streamlit • Side-by-side Markdown & Speech Audio Evaluator.")

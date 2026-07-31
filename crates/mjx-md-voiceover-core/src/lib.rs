@@ -7,12 +7,20 @@
 //! Designed for sub-millisecond execution (<1-10 ms SLA) and full WebAssembly (`wasm32-unknown-unknown`) safety.
 
 pub mod ast;
+pub mod formatter;
 pub mod parser;
 
 pub use ast::{
     EmphasisType, PauseDuration, SpeechToken, TransformContext, VoiceAst, VoiceAstNode,
 };
+pub use formatter::SpeechFormatter;
 pub use parser::VoiceAstParser;
+
+/// Convenient top-level helper function to parse Markdown into natural speech text.
+pub fn parse_and_format(markdown: &str) -> Result<String> {
+    let ast = VoiceAstParser::parse(markdown)?;
+    Ok(SpeechFormatter::format(&ast))
+}
 
 /// Engine error types.
 #[derive(Debug, thiserror::Error)]

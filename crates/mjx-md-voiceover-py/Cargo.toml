@@ -1,0 +1,17 @@
+[package]
+name = "mjx-md-voiceover-py"
+version.workspace = true
+edition.workspace = true
+authors.workspace = true
+license.workspace = true
+repository.workspace = true
+keywords.workspace = true
+categories.workspace = true
+description = "Python FFI bindings for mjx-md-voiceover."
+
+[lib]
+crate-type = ["cdylib"]
+
+[dependencies]
+mjx-md-voiceover-core = { path = "../mjx-md-voiceover-core" }
+pyo3.workspace = true

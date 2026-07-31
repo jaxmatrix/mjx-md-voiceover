@@ -1,0 +1,14 @@
+[package]
+name = "mjx-md-voiceover-plugins"
+version.workspace = true
+edition.workspace = true
+authors.workspace = true
+license.workspace = true
+repository.workspace = true
+keywords.workspace = true
+categories.workspace = true
+description = "Plugin ecosystem for mjx-md-voiceover."
+
+[dependencies]
+mjx-md-voiceover-core = { path = "../mjx-md-voiceover-core" }
+serde.workspace = true

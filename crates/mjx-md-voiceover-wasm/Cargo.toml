@@ -1,0 +1,17 @@
+[package]
+name = "mjx-md-voiceover-wasm"
+version.workspace = true
+edition.workspace = true
+authors.workspace = true
+license.workspace = true
+repository.workspace = true
+keywords.workspace = true
+categories.workspace = true
+description = "WebAssembly bindings for mjx-md-voiceover."
+
+[lib]
+crate-type = ["cdylib", "rlib"]
+
+[dependencies]
+mjx-md-voiceover-core = { path = "../mjx-md-voiceover-core" }
+wasm-bindgen.workspace = true

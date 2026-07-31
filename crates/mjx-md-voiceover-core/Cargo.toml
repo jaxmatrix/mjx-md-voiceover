@@ -1,0 +1,18 @@
+[package]
+name = "mjx-md-voiceover-core"
+version.workspace = true
+edition.workspace = true
+authors.workspace = true
+license.workspace = true
+repository.workspace = true
+keywords.workspace = true
+categories.workspace = true
+description = "Core Markdown AST parser and speech voiceover generator engine for mjx-md-voiceover."
+
+[dependencies]
+pulldown-cmark.workspace = true
+thiserror.workspace = true
+serde.workspace = true
+
+[dev-dependencies]
+criterion = "0.5"

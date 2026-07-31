@@ -1,0 +1,68 @@
+{
+  "dataset_version": "1.0.0",
+  "total_pairs": 5,
+  "average_char_readout_ratio": 0.868,
+  "average_word_readout_ratio": 0.817,
+  "pairs": [
+    {
+      "id": "admonitions_mixed",
+      "name": "ADMONITIONS MIXED",
+      "input_markdown": "# Production Deployment Guidelines\n\nPlease review all safety requirements prior to executing production migrations.\n\n> [!NOTE]\n> Database backup snapshots are automatically created every 6 hours.\n\n> [!TIP]\n> Use `--dry-run` flag to validate schema migrations before applying changes.\n\n> [!IMPORTANT]\n> Ensure all active worker nodes are drained before terminating instance groups.\n\n> [!WARNING]\n> Dropping columns without zero-downtime deprecation strategy will break active API clients.\n\n> [!CAUTION]\n> Hard resetting the primary database cluster will result in irreversible data loss.\n\n## Operational Escalation Procedure\n\n> If primary region fails:\n> > Notify site reliability engineering team immediately.\n> > > Initiate multi-region failover DNS routing.\n",
+      "output_voiceover_text": "Heading: Production Deployment Guidelines. Please review all safety requirements prior to executing production migrations. Quote: [!NOTE] Database backup snapshots are automatically created every 6 hours. Quote: [!TIP] Use --dry-run flag to validate schema migrations before applying changes. Quote: [!IMPORTANT] Ensure all active worker nodes are drained before terminating instance groups. Quote: [!WARNING] Dropping columns without zero-downtime deprecation strategy will break active API clients. Quote: [!CAUTION] Hard resetting the primary database cluster will result in irreversible data loss. Section: Operational Escalation Procedure. Quote: If primary region fails:. Quote: Notify site reliability engineering team immediately. Quote: Initiate multi-region failover DNS routing.",
+      "input_char_count": 760,
+      "output_char_count": 789,
+      "input_word_count": 107,
+      "output_word_count": 99,
+      "readout_char_ratio": 1.038,
+      "readout_word_ratio": 0.925
+    },
+    {
+      "id": "code_heavy",
+      "name": "CODE HEAVY",
+      "input_markdown": "# System Architecture & API Reference\n\nThis document describes the high-performance async runtime and database integration.\n\n## Installation\n\nRun the following command to install the package:\n\n```bash\ncargo add mjx-md-voiceover --features full\nnpm install @mjx/md-voiceover\npip install mjx-md-voiceover\n```\n\n## Rust Implementation\n\n```rust\nuse std::sync::Arc;\n\npub struct VoiceEngine {\n    buffer_size: usize,\n}\n\nimpl VoiceEngine {\n    pub fn new(capacity: usize) -> Self {\n        Self { buffer_size: capacity }\n    }\n\n    pub fn process_stream(&self, input: &str) -> String {\n        format!(\"Processed: {}\", input)\n    }\n}\n```\n\n## Python Integration\n\n```python\nimport asyncio\nfrom mjx_md_voiceover import VoiceEngine\n\nasync def main():\n    engine = VoiceEngine(capacity=1024)\n    result = await engine.process_async(\"# Hello\")\n    print(f\"Result: {result}\")\n\nif __name__ == \"__main__\":\n    asyncio.run(main())\n```\n\n## SQL Schema Definition\n\n```sql\nCREATE TABLE voice_sessions (\n    session_id UUID PRIMARY KEY DEFAULT gen_random_uuid(),\n    created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),\n    markdown_bytes INT NOT NULL,\n    latency_ms NUMERIC(6, 3) NOT NULL\n);\n```\n\nUse `engine.process_stream(&data)` inside your main thread loop.\n",
+      "output_voiceover_text": "Heading: System Architecture & API Reference. This document describes the high-performance async runtime and database integration. Section: Installation. Run the following command to install the package:. Shell command script snippet. Section: Rust Implementation. Code snippet in Rust. Section: Python Integration. Code snippet in Python. Section: SQL Schema Definition. Fenced code block snippet. Use engine.process_stream(&data) inside your main thread loop.",
+      "input_char_count": 1239,
+      "output_char_count": 461,
+      "input_word_count": 151,
+      "output_word_count": 59,
+      "readout_char_ratio": 0.372,
+      "readout_word_ratio": 0.391
+    },
+    {
+      "id": "math_heavy",
+      "name": "MATH HEAVY",
+      "input_markdown": "# Mathematical Foundations of Quantum Mechanics\n\nThis paper outlines the mathematical formulation of wavepacket dynamics.\n\n## Kinetic Energy & Hamiltonian\n\nThe total energy operator is given by $H = T + V$, where $T = \\frac{p^2}{2m}$.\n\nIn three-dimensional Hilbert space, the time-independent Schrödinger equation is expressed as:\n\n$$\n-\\frac{\\hbar^2}{2m} \\nabla^2 \\Psi(\\mathbf{r}) + V(\\mathbf{r})\\Psi(\\mathbf{r}) = E\\Psi(\\mathbf{r})\n$$\n\n## Normalization & Probability Density\n\nThe probability density function $\\rho(x)$ must satisfy the normalization condition:\n\n$$\n\\int_{-\\infty}^{\\infty} |\\Psi(x, t)|^2 dx = 1\n$$\n\nwhere $\\Psi(x, t) = A e^{i(kx - \\omega t)}$ represents a free particle plane wave with wavevector $k$ and angular frequency $\\omega$.\n\n## Gaussian Wavepacket Evolution\n\nFor a Gaussian wavepacket centered at $x_0 = 0$, the variance expands over time according to:\n\n$$\n\\sigma(t) = \\sigma_0 \\sqrt{1 + \\left(\\frac{\\hbar t}{2m \\sigma_0^2}\\right)^2}\n$$\n\nAs $t \\to \\infty$, the spatial spread approaches linear growth.\n",
+      "output_voiceover_text": "Heading: Mathematical Foundations of Quantum Mechanics. This paper outlines the mathematical formulation of wavepacket dynamics. Section: Kinetic Energy & Hamiltonian. The total energy operator is given by $H = T + V$, where $T = \\frac{p^2}{2m}$. In three-dimensional Hilbert space, the time-independent Schrödinger equation is expressed as:. $$ -\\frac{\\hbar^2}{2m} \\nabla^2 \\Psi(\\mathbf{r}) + V(\\mathbf{r})\\Psi(\\mathbf{r}) = E\\Psi(\\mathbf{r}) $$. Section: Normalization & Probability Density. The probability density function $\\rho(x)$ must satisfy the normalization condition:. $$ \\int_{-\\infty}^{\\infty} |\\Psi(x, t)|^2 dx = 1 $$. where $\\Psi(x, t) = A e^{i(kx - \\omega t)}$ represents a free particle plane wave with wavevector $k$ and angular frequency $\\omega$. Section: Gaussian Wavepacket Evolution. For a Gaussian wavepacket centered at $x_0 = 0$, the variance expands over time according to:. $$ \\sigma(t) = \\sigma_0 \\sqrt{1 + \\left(\\frac{\\hbar t}{2m \\sigma_0^2}\\right)^2} $$. As $t \\to \\infty$, the spatial spread approaches linear growth.",
+      "input_char_count": 1028,
+      "output_char_count": 1049,
+      "input_word_count": 141,
+      "output_word_count": 141,
+      "readout_char_ratio": 1.02,
+      "readout_word_ratio": 1.0
+    },
+    {
+      "id": "nested_lists",
+      "name": "NESTED LISTS",
+      "input_markdown": "# Comprehensive Project Breakdown\n\n## Phase 1: Planning & Setup\n1. Requirements Gathering\n   - User interviews\n   - Benchmark target definition\n   - Performance budget setup\n2. Architecture Design\n   - Core AST definition\n   - Plugin registration lifecycle\n   - FFI bindings layer\n3. Stakeholder Alignment\n   - Linear epic issue creation\n   - Documentation review\n\n## Phase 2: Implementation Steps\n* Core Engine\n  * CommonMark event parser integration\n  * Speech token emission\n  * Natural language formatter\n* Extensible Plugins\n  * Code block verbalization\n  * LaTeX math formula conversion\n  * Callout box auditory alerts\n* Cross-Platform Target Bindings\n  * WebAssembly `wasm-bindgen`\n  * Python `PyO3` / `maturin`\n\n## Task Checklists\n- [x] Create workspace Cargo.toml\n- [x] Build core speech parser\n- [x] Add GitHub Actions CI\n- [ ] Deploy to global CDN\n",
+      "output_voiceover_text": "Heading: Comprehensive Project Breakdown. Section: Phase 1: Planning & Setup. First, Requirements Gathering User interviews. Benchmark target definition. Performance budget setup. Second, Architecture Design Core AST definition. Plugin registration lifecycle. FFI bindings layer. Third, Stakeholder Alignment Linear epic issue creation. Documentation review. Section: Phase 2: Implementation Steps. Core Engine CommonMark event parser integration. Speech token emission. Natural language formatter. Extensible Plugins Code block verbalization. LaTeX math formula conversion. Callout box auditory alerts. Cross-Platform Target Bindings WebAssembly wasm-bindgen. Python PyO3 / maturin. Section: Task Checklists. Create workspace Cargo.toml. Build core speech parser. Add GitHub Actions CI. Deploy to global CDN.",
+      "input_char_count": 859,
+      "output_char_count": 809,
+      "input_word_count": 127,
+      "output_word_count": 99,
+      "readout_char_ratio": 0.942,
+      "readout_word_ratio": 0.78
+    },
+    {
+      "id": "technical_spec",
+      "name": "TECHNICAL SPEC",
+      "input_markdown": "# Ultra-Fast Voiceover Engine Specification\n\nThe `mjx-md-voiceover` project provides an **ultra-fast**, **WASM-compliant** engine converting Markdown syntax noise into clear, natural human speech.\n\n## System Overview\n\nStandard TTS engines read syntax symbols like `###`, `**`, or `$` literally, creating jarring audio experiences. `mjx-md-voiceover` resolves this by transforming raw CommonMark syntax into smooth spoken prose.\n\n### Architectural Rules\n\n1. **Sub-10ms SLA:** Parsing and conversion MUST complete in $< 10\\text{ ms}$ (target $< 1\\text{ ms}$).\n2. **WASM First:** Target `wasm32-unknown-unknown` without OS I/O or browser DOM dependencies.\n3. **Thread Safety:** All plugins implement `Send + Sync`.\n\n> [!NOTE]\n> All plugin transformations are applied during AST traversal before speech string formatting.\n\nFor more information, visit the [Documentation Site](https://mjx.dev/docs).\n",
+      "output_voiceover_text": "Heading: Ultra-Fast Voiceover Engine Specification. The mjx-md-voiceover project provides an ultra-fast, WASM-compliant engine converting Markdown syntax noise into clear, natural human speech. Section: System Overview. Standard TTS engines read syntax symbols like ###, **, or $ literally, creating jarring audio experiences. mjx-md-voiceover resolves this by transforming raw CommonMark syntax into smooth spoken prose. Section: Architectural Rules. First, Sub-10ms SLA: Parsing and conversion MUST complete in $< 10\\text{ ms}$ (target $< 1\\text{ ms}$). Second, WASM First: Target wasm32-unknown-unknown without OS I/O or browser DOM dependencies. Third, Thread Safety: All plugins implement Send + Sync. Quote: [!NOTE] All plugin transformations are applied during AST traversal before speech string formatting. For more information, visit the Documentation Site.",
+      "input_char_count": 895,
+      "output_char_count": 866,
+      "input_word_count": 115,
+      "output_word_count": 114,
+      "readout_char_ratio": 0.968,
+      "readout_word_ratio": 0.991
+    }
+  ]
+}

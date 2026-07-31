@@ -17,6 +17,7 @@ serde.workspace = true
 [dev-dependencies]
 criterion = "0.5"
 mjx-md-voiceover-plugins = { path = "../mjx-md-voiceover-plugins" }
+serde_json.workspace = true
 
 [[bench]]
 name = "voiceover_bench"

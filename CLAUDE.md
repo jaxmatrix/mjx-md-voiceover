@@ -49,8 +49,14 @@ cargo clippy --workspace --all-targets -- -D warnings
 cargo bench  -p mjx-md-voiceover-core     # Verify performance (<10ms target)
 ```
 
-## Git / Commits
+## Git, Linear & Task Delivery Workflow (Non-Negotiable)
 
-- **Project-setup commits go on `main`;** feature development uses **branch per feature + PR**.
-- **Atomic commits** — one self-contained change, green build & green test before committing.
-- **Do NOT add `Co-Authored-By` or AI-attribution trailers** to commit messages.
+- **Linear is the Single Source of Truth:** All project tasks, epics, and sub-issues are managed in Linear under the `AI Plugins` project (Team: `Mjx`).
+- **Branch-per-Feature Naming:** Include the associated Linear issue key in the branch name (e.g. `feature/MJX-214-init-core-crate` or `jaishukla7768/mjx-214-...`).
+- **Atomic Commits:** Make small, logical, self-contained atomic commits. Every commit MUST pass `cargo build`, `cargo test`, and `cargo clippy`.
+- **No AI Attribution Trailers:** Do NOT add `Co-Authored-By` or AI-attribution trailers to commit messages.
+- **End-of-Task Delivery:** At the completion of every task:
+  1. Open a Pull Request (PR) against `main`.
+  2. Associate the PR with the Linear issue (include the ticket ID like `MJX-214` in the PR title and description).
+  3. Update the Linear issue status (e.g. move to In Review / Done) and add a completion summary comment using Linear tools.
+

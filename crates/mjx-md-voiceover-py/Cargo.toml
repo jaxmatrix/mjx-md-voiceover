@@ -14,4 +14,5 @@ crate-type = ["cdylib"]
 
 [dependencies]
 mjx-md-voiceover-core = { path = "../mjx-md-voiceover-core" }
-pyo3.workspace = true
+pyo3 = { version = "0.23", features = ["extension-module", "auto-initialize"] }
+serde_json.workspace = true

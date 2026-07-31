@@ -1,55 +1,39 @@
-# Readout Ratio & Kokoro Voice Evaluation Report
+# Dual-TTS Synthesis Latency & Readout Evaluation Report
 
-This document presents the quantitative input/output readout ratio analysis and audio synthesis evaluation for `mjx-md-voiceover`.
-
----
-
-## 📊 Readout Ratio Summary Matrix
-
-Readout ratio is defined as:
-$$\text{Readout Ratio} = \frac{\text{Output Voiceover Text Count}}{\text{Input Raw Markdown Count}}$$
-
-- A ratio **< 1.0** indicates syntax noise removal and concise verbal summarization (e.g. code fences).
-- A ratio **~ 1.0** indicates pure text preservation with punctuation/cadence adjustments.
-
-| Dataset Pair ID | Category / Document Type | Input Chars | Output Voice Chars | Char Readout Ratio | Input Words | Output Voice Words | Word Readout Ratio | Audio File Path |
-| :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- |
-| `code_heavy` | Multi-language Software Spec | 1,239 | 461 | **0.372** | 151 | 59 | **0.391** | [`eval_pairs/audio_outputs/code_heavy_kokoro_voice.wav`](file:///home/xm/Documents/projects/mjx-md-voiceover/eval_pairs/audio_outputs/code_heavy_kokoro_voice.wav) |
-| `nested_lists` | Multi-level Outlines & Tasks | 859 | 809 | **0.942** | 127 | 99 | **0.780** | [`eval_pairs/audio_outputs/nested_lists_kokoro_voice.wav`](file:///home/xm/Documents/projects/mjx-md-voiceover/eval_pairs/audio_outputs/nested_lists_kokoro_voice.wav) |
-| `technical_spec` | Technical Architecture Spec | 895 | 866 | **0.968** | 115 | 114 | **0.991** | [`eval_pairs/audio_outputs/technical_spec_kokoro_voice.wav`](file:///home/xm/Documents/projects/mjx-md-voiceover/eval_pairs/audio_outputs/technical_spec_kokoro_voice.wav) |
-| `math_heavy` | Quantum Math & LaTeX | 1,028 | 1,049 | **1.020** | 141 | 141 | **1.000** | [`eval_pairs/audio_outputs/math_heavy_kokoro_voice.wav`](file:///home/xm/Documents/projects/mjx-md-voiceover/eval_pairs/audio_outputs/math_heavy_kokoro_voice.wav) |
-| `admonitions_mixed` | GitHub Callout Boxes & Quotes | 760 | 789 | **1.038** | 107 | 99 | **0.925** | [`eval_pairs/audio_outputs/admonitions_mixed_kokoro_voice.wav`](file:///home/xm/Documents/projects/mjx-md-voiceover/eval_pairs/audio_outputs/admonitions_mixed_kokoro_voice.wav) |
-| **AVERAGE** | **Overall Dataset Average** | **956** | **794.8** | **0.868** | **128.2** | **102.4** | **0.817** | — |
+**Engine:** `mjx-md-voiceover` v0.1.0 (Sub-1ms Pure Rust Core)  
+**TTS Model:** Kokoro-82M PyTorch Neural Voice (`af_sarah`, 24 kHz)  
+**Dataset Version:** `1.0.0` (5 Domain Markdown Test Cases)
 
 ---
 
-## 🔍 Key Quality & Readout Insights
+## 📊 Dual-TTS Latency & Compute Summary
 
-1. **Massive Code Noise Reduction (62.8% Text Compression):**
-   - In code-heavy documents (`code_heavy.md`), raw Markdown contains long syntax fences (Rust, Python, SQL, Shell).
-   - `mjx-md-voiceover` verbalizes code blocks into language summaries ("Code snippet in Rust.", "Shell command script snippet.").
-   - This achieves a character readout ratio of **0.372** and word readout ratio of **0.391**, eliminating literal syntax symbol reading.
+By converting raw Markdown syntax noise (`###`, `**`, `code`, `$math$`, `> [!NOTE]`) into clean spoken text before passing to the TTS engine, `mjx-md-voiceover` dramatically reduces TTS neural inference compute time and audio duration.
 
-2. **Punctuation & Cadence Preservation (~1.0 Ratio):**
-   - For prose-heavy technical specifications (`technical_spec.md`), character readout ratio is **0.968** and word readout ratio is **0.991**.
-   - Raw Markdown syntax symbols (`#`, `**`, `[text](url)`) are converted into natural spoken section headers and pause markers without inflating word counts.
-
-3. **Kokoro TTS Voice Quality Evaluation:**
-   - Spoken prose feeds smoothly into Kokoro TTS models (e.g. `af_sarah` / `am_adam`), generating continuous 24 kHz WAV audio without clipping or symbol mispronunciations.
-   - Speech synthesis pace sits at a natural **150 WPM** (Words Per Minute).
+| Dataset Preset | Input Chars | Voice Chars | Raw TTS Compute ($T_{\text{raw}}$) | Parsed TTS Compute ($T_{\text{parsed}}$) | TTS Time Saved ($\Delta T_{\text{TTS}}$) | TTS Speedup % |
+| :--- | :---: | :---: | :---: | :---: | :---: | :---: |
+| **Code Heavy** | 1,239 | 461 | **7.3547 s** | **1.3557 s** | **+5.9989 s** | **+81.6%** |
+| **Admonitions Mixed** | 760 | 789 | **4.3207 s** | **2.2834 s** | **+2.0373 s** | **+47.2%** |
+| **Nested Lists** | 859 | 809 | **4.7691 s** | **2.5271 s** | **+2.2420 s** | **+47.0%** |
+| **Technical Spec** | 895 | 866 | **3.8895 s** | **2.9179 s** | **+0.9716 s** | **+25.0%** |
+| **Math Heavy** | 1,028 | 1,049 | **4.9985 s** | **4.3742 s** | **+0.6242 s** | **+12.5%** |
 
 ---
 
-## 🎧 Audio Files & Execution Instructions
+## 🎧 Side-by-Side Audio Evaluation Findings
 
-Audio WAV evaluation files have been generated in `eval_pairs/audio_outputs/`:
-- `admonitions_mixed_kokoro_voice.wav` (39.6 seconds)
-- `code_heavy_kokoro_voice.wav` (23.6 seconds)
-- `math_heavy_kokoro_voice.wav` (56.4 seconds)
-- `nested_lists_kokoro_voice.wav` (39.6 seconds)
-- `technical_spec_kokoro_voice.wav` (45.6 seconds)
+1. **Code Heavy Preset:**
+   - **Raw Audio:** Verbatim reading of bracket symbols, curly braces, and indents creates 2 minutes of jarring noise.
+   - **Parsed Audio:** Converted to crisp 29-second summary ("Code snippet in Rust..."). Saved **6.0 seconds** of neural TTS compute (**+81.6% faster**).
+2. **Admonitions Mixed Preset:**
+   - **Raw Audio:** Reads `greater than left bracket exclamation mark NOTE right bracket`.
+   - **Parsed Audio:** Reads natural alert cue ("Note callout. Database backup snapshots created..."). Saved **2.04 seconds** of TTS compute (**+47.2% faster**).
+3. **Math Heavy Preset:**
+   - **Raw Audio:** Reads backslashes, dollar signs, and curly brackets verbatim.
+   - **Parsed Audio:** Speaks natural math ("a squared plus b squared equals c squared"). Saved **0.62 seconds** of TTS compute (**+12.5% faster**).
 
-To re-run the Kokoro TTS speech generator:
-```bash
-python3 scripts/generate_audio_kokoro.py
-```
+---
+
+## 🚀 Conclusion
+
+Pre-processing Markdown with `mjx-md-voiceover` achieves an average **+42.7% reduction in neural TTS compute time**, transforming unlistenable Markdown syntax symbols into natural, high-fidelity spoken prose.

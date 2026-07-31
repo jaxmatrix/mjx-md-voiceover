@@ -14,7 +14,13 @@
       "input_word_count": 107,
       "output_word_count": 99,
       "readout_char_ratio": 1.038,
-      "readout_word_ratio": 0.925
+      "readout_word_ratio": 0.925,
+      "raw_tts_synthesis_sec": 4.3207,
+      "parsed_tts_synthesis_sec": 2.2834,
+      "tts_time_saved_sec": 2.0373,
+      "tts_speedup_pct": 47.2,
+      "raw_audio_duration_sec": 60.92,
+      "parsed_audio_duration_sec": 50.33
     },
     {
       "id": "code_heavy",
@@ -26,19 +32,31 @@
       "input_word_count": 151,
       "output_word_count": 58,
       "readout_char_ratio": 0.369,
-      "readout_word_ratio": 0.384
+      "readout_word_ratio": 0.384,
+      "raw_tts_synthesis_sec": 7.3547,
+      "parsed_tts_synthesis_sec": 1.3557,
+      "tts_time_saved_sec": 5.9989,
+      "tts_speedup_pct": 81.6,
+      "raw_audio_duration_sec": 120.9,
+      "parsed_audio_duration_sec": 29.88
     },
     {
       "id": "math_heavy",
       "name": "MATH HEAVY",
-      "input_markdown": "# Mathematical Foundations of Quantum Mechanics\n\nThis paper outlines the mathematical formulation of wavepacket dynamics.\n\n## Kinetic Energy & Hamiltonian\n\nThe total energy operator is given by $H = T + V$, where $T = \\frac{p^2}{2m}$.\n\nIn three-dimensional Hilbert space, the time-independent Schrödinger equation is expressed as:\n\n$$\n-\\frac{\\hbar^2}{2m} \\nabla^2 \\Psi(\\mathbf{r}) + V(\\mathbf{r})\\Psi(\\mathbf{r}) = E\\Psi(\\mathbf{r})\n$$\n\n## Normalization & Probability Density\n\nThe probability density function $\\rho(x)$ must satisfy the normalization condition:\n\n$$\n\\int_{-\\infty}^{\\infty} |\\Psi(x, t)|^2 dx = 1\n$$\n\nwhere $\\Psi(x, t) = A e^{i(kx - \\omega t)}$ represents a free particle plane wave with wavevector $k$ and angular frequency $\\omega$.\n\n## Gaussian Wavepacket Evolution\n\nFor a Gaussian wavepacket centered at $x_0 = 0$, the variance expands over time according to:\n\n$$\n\\sigma(t) = \\sigma_0 \\sqrt{1 + \\left(\\frac{\\hbar t}{2m \\sigma_0^2}\\right)^2}\n$$\n\nAs $t \\to \\infty$, the spatial spread approaches linear growth.\n",
-      "output_voiceover_text": "Heading: Mathematical Foundations of Quantum Mechanics. This paper outlines the mathematical formulation of wavepacket dynamics. Section: Kinetic Energy & Hamiltonian. The total energy operator is given by $H = T + V$, where $T = \\frac{p^2}{2m}$. In three-dimensional Hilbert space, the time-independent Schrödinger equation is expressed as:. $$ -\\frac{\\hbar^2}{2m} \\nabla^2 \\Psi(\\mathbf{r}) + V(\\mathbf{r})\\Psi(\\mathbf{r}) = E\\Psi(\\mathbf{r}) $$. Section: Normalization & Probability Density. The probability density function $\\rho(x)$ must satisfy the normalization condition:. $$ \\int_{-\\infty}^{\\infty} |\\Psi(x, t)|^2 dx = 1 $$. where $\\Psi(x, t) = A e^{i(kx - \\omega t)}$ represents a free particle plane wave with wavevector $k$ and angular frequency $\\omega$. Section: Gaussian Wavepacket Evolution. For a Gaussian wavepacket centered at $x_0 = 0$, the variance expands over time according to:. $$ \\sigma(t) = \\sigma_0 \\sqrt{1 + \\left(\\frac{\\hbar t}{2m \\sigma_0^2}\\right)^2} $$. As $t \\to \\infty$, the spatial spread approaches linear growth.",
+      "input_markdown": "# Mathematical Foundations of Quantum Mechanics\n\nThis paper outlines the mathematical formulation of wavepacket dynamics.\n\n## Kinetic Energy & Hamiltonian\n\nThe total energy operator is given by $H = T + V$, where $T = \\frac{p^2}{2m}$.\n\nIn three-dimensional Hilbert space, the time-independent Schr\u00f6dinger equation is expressed as:\n\n$$\n-\\frac{\\hbar^2}{2m} \\nabla^2 \\Psi(\\mathbf{r}) + V(\\mathbf{r})\\Psi(\\mathbf{r}) = E\\Psi(\\mathbf{r})\n$$\n\n## Normalization & Probability Density\n\nThe probability density function $\\rho(x)$ must satisfy the normalization condition:\n\n$$\n\\int_{-\\infty}^{\\infty} |\\Psi(x, t)|^2 dx = 1\n$$\n\nwhere $\\Psi(x, t) = A e^{i(kx - \\omega t)}$ represents a free particle plane wave with wavevector $k$ and angular frequency $\\omega$.\n\n## Gaussian Wavepacket Evolution\n\nFor a Gaussian wavepacket centered at $x_0 = 0$, the variance expands over time according to:\n\n$$\n\\sigma(t) = \\sigma_0 \\sqrt{1 + \\left(\\frac{\\hbar t}{2m \\sigma_0^2}\\right)^2}\n$$\n\nAs $t \\to \\infty$, the spatial spread approaches linear growth.\n",
+      "output_voiceover_text": "Heading: Mathematical Foundations of Quantum Mechanics. This paper outlines the mathematical formulation of wavepacket dynamics. Section: Kinetic Energy & Hamiltonian. The total energy operator is given by $H = T + V$, where $T = \\frac{p^2}{2m}$. In three-dimensional Hilbert space, the time-independent Schr\u00f6dinger equation is expressed as:. $$ -\\frac{\\hbar^2}{2m} \\nabla^2 \\Psi(\\mathbf{r}) + V(\\mathbf{r})\\Psi(\\mathbf{r}) = E\\Psi(\\mathbf{r}) $$. Section: Normalization & Probability Density. The probability density function $\\rho(x)$ must satisfy the normalization condition:. $$ \\int_{-\\infty}^{\\infty} |\\Psi(x, t)|^2 dx = 1 $$. where $\\Psi(x, t) = A e^{i(kx - \\omega t)}$ represents a free particle plane wave with wavevector $k$ and angular frequency $\\omega$. Section: Gaussian Wavepacket Evolution. For a Gaussian wavepacket centered at $x_0 = 0$, the variance expands over time according to:. $$ \\sigma(t) = \\sigma_0 \\sqrt{1 + \\left(\\frac{\\hbar t}{2m \\sigma_0^2}\\right)^2} $$. As $t \\to \\infty$, the spatial spread approaches linear growth.",
       "input_char_count": 1028,
       "output_char_count": 1049,
       "input_word_count": 141,
       "output_word_count": 141,
       "readout_char_ratio": 1.02,
-      "readout_word_ratio": 1.0
+      "readout_word_ratio": 1.0,
+      "raw_tts_synthesis_sec": 4.9985,
+      "parsed_tts_synthesis_sec": 4.3742,
+      "tts_time_saved_sec": 0.6242,
+      "tts_speedup_pct": 12.5,
+      "raw_audio_duration_sec": 103.72,
+      "parsed_audio_duration_sec": 95.45
     },
     {
       "id": "nested_lists",
@@ -50,7 +68,13 @@
       "input_word_count": 127,
       "output_word_count": 99,
       "readout_char_ratio": 0.942,
-      "readout_word_ratio": 0.78
+      "readout_word_ratio": 0.78,
+      "raw_tts_synthesis_sec": 4.7691,
+      "parsed_tts_synthesis_sec": 2.5271,
+      "tts_time_saved_sec": 2.242,
+      "tts_speedup_pct": 47.0,
+      "raw_audio_duration_sec": 84.17,
+      "parsed_audio_duration_sec": 55.35
     },
     {
       "id": "technical_spec",
@@ -62,7 +86,13 @@
       "input_word_count": 115,
       "output_word_count": 114,
       "readout_char_ratio": 0.968,
-      "readout_word_ratio": 0.991
+      "readout_word_ratio": 0.991,
+      "raw_tts_synthesis_sec": 3.8895,
+      "parsed_tts_synthesis_sec": 2.9179,
+      "tts_time_saved_sec": 0.9716,
+      "tts_speedup_pct": 25.0,
+      "raw_audio_duration_sec": 78.92,
+      "parsed_audio_duration_sec": 63.62
     }
   ]
 }

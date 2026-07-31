@@ -33,3 +33,5 @@ dist-js/
 # Local references / benchmarks output
 /scratch/
 /bench_results/
+eval_pairs/audio_outputs/
+*.wav

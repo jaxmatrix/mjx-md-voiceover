@@ -36,7 +36,10 @@ impl SpeechFormatter {
     }
 
     /// Renders a `VoiceAst` with plugin transformations applied via `PluginRegistry`.
-    pub fn format_with_registry(ast: &VoiceAst, registry: &crate::plugin::PluginRegistry) -> String {
+    pub fn format_with_registry(
+        ast: &VoiceAst,
+        registry: &crate::plugin::PluginRegistry,
+    ) -> String {
         let mut out = String::with_capacity(256);
         let mut context = crate::ast::TransformContext::default();
         for node in &ast.nodes {
@@ -53,7 +56,8 @@ impl SpeechFormatter {
     ) {
         if let Some(token) = registry.transform_node(node, context) {
             match token {
-                crate::ast::SpeechToken::Text(text) | crate::ast::SpeechToken::CustomSpeech(text) => {
+                crate::ast::SpeechToken::Text(text)
+                | crate::ast::SpeechToken::CustomSpeech(text) => {
                     if !out.is_empty() && !out.ends_with(' ') {
                         out.push(' ');
                     }
@@ -61,7 +65,10 @@ impl SpeechFormatter {
                     Self::ensure_period(out);
                     return;
                 }
-                crate::ast::SpeechToken::VerbalizedCode { language: _, summary } => {
+                crate::ast::SpeechToken::VerbalizedCode {
+                    language: _,
+                    summary,
+                } => {
                     if !out.is_empty() && !out.ends_with(' ') {
                         out.push(' ');
                     }
@@ -74,10 +81,22 @@ impl SpeechFormatter {
                 }
             }
         }
-        Self::format_node(node, out);
+        Self::format_node(node, registry, context, out);
     }
 
-    fn format_node(node: &VoiceAstNode, out: &mut String) {
+    /// Applies the built-in CommonMark speech rules to a single node.
+    ///
+    /// Takes the registry and context purely to hand them back to
+    /// `format_node_with_registry` on the way down: a plugin must get its shot at
+    /// *every* node, not just the ones sitting at the document root. Without this,
+    /// a fenced block nested in a list item, or `$math$` inside a paragraph, would
+    /// silently skip the registry and fall through to the default rule.
+    fn format_node(
+        node: &VoiceAstNode,
+        registry: &crate::plugin::PluginRegistry,
+        context: &mut crate::ast::TransformContext,
+        out: &mut String,
+    ) {
         match node {
             VoiceAstNode::Heading { level, children } => {
                 if !out.is_empty() && !out.ends_with(' ') {
@@ -88,14 +107,14 @@ impl SpeechFormatter {
                 } else {
                     out.push_str("Section: ");
                 }
-                Self::format_children(children, out);
+                Self::format_children(children, registry, context, out);
                 Self::ensure_period(out);
             }
             VoiceAstNode::Paragraph { children } => {
                 if !out.is_empty() && !out.ends_with(' ') {
                     out.push(' ');
                 }
-                Self::format_children(children, out);
+                Self::format_children(children, registry, context, out);
                 Self::ensure_period(out);
             }
             VoiceAstNode::List {
@@ -112,19 +131,19 @@ impl SpeechFormatter {
                         out.push_str(", ");
                     }
                     if let VoiceAstNode::ListItem { children } = item {
-                        Self::format_children(children, out);
+                        Self::format_children(children, registry, context, out);
                     } else {
-                        Self::format_node(item, out);
+                        Self::format_node(item, registry, context, out);
                     }
                     Self::ensure_period(out);
                 }
             }
             VoiceAstNode::ListItem { children } => {
-                Self::format_children(children, out);
+                Self::format_children(children, registry, context, out);
                 Self::ensure_period(out);
             }
             VoiceAstNode::Emphasis { children } | VoiceAstNode::Strong { children } => {
-                Self::format_children(children, out);
+                Self::format_children(children, registry, context, out);
             }
             VoiceAstNode::CodeSpan { text } => {
                 out.push_str(text.trim());
@@ -149,11 +168,11 @@ impl SpeechFormatter {
                     out.push(' ');
                 }
                 out.push_str("Quote: ");
-                Self::format_children(children, out);
+                Self::format_children(children, registry, context, out);
                 Self::ensure_period(out);
             }
             VoiceAstNode::Link { text, .. } => {
-                Self::format_children(text, out);
+                Self::format_children(text, registry, context, out);
             }
             VoiceAstNode::Text { text } => {
                 out.push_str(text);
@@ -174,9 +193,14 @@ impl SpeechFormatter {
         }
     }
 
-    fn format_children(children: &[VoiceAstNode], out: &mut String) {
+    fn format_children(
+        children: &[VoiceAstNode],
+        registry: &crate::plugin::PluginRegistry,
+        context: &mut crate::ast::TransformContext,
+        out: &mut String,
+    ) {
         for child in children {
-            Self::format_node(child, out);
+            Self::format_node_with_registry(child, registry, context, out);
         }
     }
 

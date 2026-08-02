@@ -14,5 +14,6 @@ crate-type = ["cdylib", "rlib"]
 
 [dependencies]
 mjx-md-voiceover-core = { path = "../mjx-md-voiceover-core" }
+mjx-md-voiceover-plugins = { path = "../mjx-md-voiceover-plugins" }
 wasm-bindgen.workspace = true
 serde_json.workspace = true

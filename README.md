@@ -182,4 +182,4 @@ python scripts/generate_audio_kokoro.py    # regenerate WAVs + timing data
 
 ## License
 
-Dual-licensed under MIT OR Apache-2.0.
+Licensed under the [MIT License](LICENSE).

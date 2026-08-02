@@ -21,7 +21,11 @@ impl VoicePlugin for MermaidPlugin {
     }
 
     fn supports_node<'a>(&self, node: &VoiceAstNode<'a>) -> bool {
-        if let VoiceAstNode::CodeBlock { language: Some(lang), .. } = node {
+        if let VoiceAstNode::CodeBlock {
+            language: Some(lang),
+            ..
+        } = node
+        {
             return lang.trim().eq_ignore_ascii_case("mermaid");
         }
         false

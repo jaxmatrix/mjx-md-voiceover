@@ -17,7 +17,8 @@ pub fn convert_markdown_to_voiceover(markdown: &str) -> PyResult<String> {
 #[pyfunction]
 #[pyo3(name = "parse_markdown_ast_json")]
 pub fn parse_markdown_ast_json(markdown: &str) -> PyResult<String> {
-    let ast = VoiceAstParser::parse(markdown).map_err(|err| PyValueError::new_err(err.to_string()))?;
+    let ast =
+        VoiceAstParser::parse(markdown).map_err(|err| PyValueError::new_err(err.to_string()))?;
     serde_json::to_string(&ast).map_err(|err| PyValueError::new_err(err.to_string()))
 }
 

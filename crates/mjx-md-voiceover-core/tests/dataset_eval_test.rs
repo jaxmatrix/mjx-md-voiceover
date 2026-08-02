@@ -44,12 +44,26 @@ fn test_markdown_dataset_conversion_and_benchmarks() {
         println!("Size: {} bytes", doc_bytes);
         println!("Core Engine Latency: {:?}", core_latency);
         println!("Plugin Ecosystem Latency: {:?}", plugin_latency);
-        println!("Core Speech Preview (first 120 chars): {:.120}...", core_speech.replace('\n', " "));
-        println!("Plugin Speech Preview (first 120 chars): {:.120}...", plugin_speech.replace('\n', " "));
+        println!(
+            "Core Speech Preview (first 120 chars): {:.120}...",
+            core_speech.replace('\n', " ")
+        );
+        println!(
+            "Plugin Speech Preview (first 120 chars): {:.120}...",
+            plugin_speech.replace('\n', " ")
+        );
 
         // Assertions
-        assert!(!core_speech.is_empty(), "Core speech string is empty for {}", file_name);
-        assert!(!plugin_speech.is_empty(), "Plugin speech string is empty for {}", file_name);
+        assert!(
+            !core_speech.is_empty(),
+            "Core speech string is empty for {}",
+            file_name
+        );
+        assert!(
+            !plugin_speech.is_empty(),
+            "Plugin speech string is empty for {}",
+            file_name
+        );
 
         let max_allowed_ms = if cfg!(debug_assertions) { 25 } else { 10 };
         assert!(
@@ -61,7 +75,10 @@ fn test_markdown_dataset_conversion_and_benchmarks() {
         );
     }
 
-    assert!(test_count >= 5, "Dataset must contain at least 5 markdown files");
+    assert!(
+        test_count >= 5,
+        "Dataset must contain at least 5 markdown files"
+    );
     println!("--------------------------------------------------");
     println!("Successfully evaluated {} dataset files!", test_count);
 }

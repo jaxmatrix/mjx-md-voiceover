@@ -11,9 +11,7 @@ pub mod formatter;
 pub mod parser;
 pub mod plugin;
 
-pub use ast::{
-    EmphasisType, PauseDuration, SpeechToken, TransformContext, VoiceAst, VoiceAstNode,
-};
+pub use ast::{EmphasisType, PauseDuration, SpeechToken, TransformContext, VoiceAst, VoiceAstNode};
 pub use formatter::SpeechFormatter;
 pub use parser::VoiceAstParser;
 pub use plugin::{PluginRegistry, VoicePlugin};

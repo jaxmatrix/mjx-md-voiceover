@@ -202,10 +202,7 @@ impl VoiceAstParser {
                             Frame::Link { text, url, title } => {
                                 VoiceAstNode::Link { text, url, title }
                             }
-                            Frame::CodeBlock {
-                                language,
-                                code_buf,
-                            } => {
+                            Frame::CodeBlock { language, code_buf } => {
                                 let code_slice: &'a str = Box::leak(code_buf.into_boxed_str());
                                 VoiceAstNode::CodeBlock {
                                     language,

@@ -1,0 +1,132 @@
+{
+  "shard": 1,
+  "files": [
+    "ex_01_api_gateway_runbook.md",
+    "ex_02_quantum_math_paper.md",
+    "ex_03_rust_service_architecture.md",
+    "ex_04_sre_incident_callouts.md",
+    "ex_05_mermaid_platform_map.md",
+    "ex_06_gfm_capacity_tables.md",
+    "ex_07_python_batch_pipeline.md",
+    "plugin_code.md",
+    "plugin_latex.md"
+  ],
+  "results": [
+    {
+      "id": "ex_01_api_gateway_runbook",
+      "input_chars": 1835,
+      "output_chars": 1722,
+      "latency_ms": 0.175,
+      "pass_latency": true,
+      "pass_no_syntax_noise": true,
+      "pass_plugin_cues": true,
+      "failures": [],
+      "speech_preview": "Heading: API Gateway Production Runbook. This runbook describes how on-call engineers diagnose latency regressions in the edge gateway that fronts the voiceover conversion service. Every section is wr",
+      "char_ratio": 0.938
+    },
+    {
+      "id": "ex_02_quantum_math_paper",
+      "input_chars": 1626,
+      "output_chars": 1680,
+      "latency_ms": 0.097,
+      "pass_latency": true,
+      "pass_no_syntax_noise": true,
+      "pass_plugin_cues": true,
+      "failures": [],
+      "speech_preview": "Heading: Mathematical Notes on Wavepacket Spreading for Voice Agents. These notes summarize the spoken forms we expect when LaTeX plugins convert physics Markdown into conversational prose. The target",
+      "char_ratio": 1.033
+    },
+    {
+      "id": "ex_03_rust_service_architecture",
+      "input_chars": 1826,
+      "output_chars": 1320,
+      "latency_ms": 0.146,
+      "pass_latency": true,
+      "pass_no_syntax_noise": false,
+      "pass_plugin_cues": true,
+      "failures": [
+        "contains raw [!NOTE]"
+      ],
+      "speech_preview": "Heading: Voiceover Core Service Architecture Brief. The mjx-md-voiceover-core crate owns CommonMark parsing, speech formatting, and the plugin trait. Downstream WASM and Python bindings must never rei",
+      "char_ratio": 0.723
+    },
+    {
+      "id": "ex_04_sre_incident_callouts",
+      "input_chars": 1474,
+      "output_chars": 1521,
+      "latency_ms": 0.198,
+      "pass_latency": true,
+      "pass_no_syntax_noise": true,
+      "pass_plugin_cues": true,
+      "failures": [],
+      "speech_preview": "Heading: Multi-Region Failover Playbook with Auditory Callouts. Site reliability engineers rely on spoken runbooks during paging events when visual dashboards are hard to parse under stress. Callout p",
+      "char_ratio": 1.032
+    },
+    {
+      "id": "ex_05_mermaid_platform_map",
+      "input_chars": 1306,
+      "output_chars": 591,
+      "latency_ms": 0.054,
+      "pass_latency": true,
+      "pass_no_syntax_noise": true,
+      "pass_plugin_cues": true,
+      "failures": [],
+      "speech_preview": "Heading: Platform Topology Narrated Through Mermaid. Architecture diagrams are useless to voice agents unless Mermaid fences become short spoken overviews. This document mixes several diagram kinds th",
+      "char_ratio": 0.453
+    },
+    {
+      "id": "ex_06_gfm_capacity_tables",
+      "input_chars": 1417,
+      "output_chars": 1277,
+      "latency_ms": 0.15,
+      "pass_latency": true,
+      "pass_no_syntax_noise": true,
+      "pass_plugin_cues": true,
+      "failures": [],
+      "speech_preview": "Heading: Capacity Planning Tables for Voiceover Throughput. Capacity reviews depend on accurate spoken summaries of GFM tables. The TablePlugin must announce column headers, row counts, and a capped p",
+      "char_ratio": 0.901
+    },
+    {
+      "id": "ex_07_python_batch_pipeline",
+      "input_chars": 1508,
+      "output_chars": 1100,
+      "latency_ms": 0.059,
+      "pass_latency": true,
+      "pass_no_syntax_noise": true,
+      "pass_plugin_cues": true,
+      "failures": [],
+      "speech_preview": "Heading: Python Batch Conversion Pipeline Guide. Data science teams convert large Markdown corpora offline before feeding Kokoro. The PyO3 module exposes convert helpers that should eventually registe",
+      "char_ratio": 0.729
+    },
+    {
+      "id": "plugin_code",
+      "input_chars": 359,
+      "output_chars": 243,
+      "latency_ms": 0.035,
+      "pass_latency": true,
+      "pass_no_syntax_noise": true,
+      "pass_plugin_cues": true,
+      "failures": [],
+      "speech_preview": "Heading: Code Verbalizer Fixture. Validate language-aware fence summaries for TTS. Section: Rust. Code snippet in Rust. Section: Python. Code snippet in Python. Section: Shell. Shell command script sn",
+      "char_ratio": 0.677
+    },
+    {
+      "id": "plugin_latex",
+      "input_chars": 263,
+      "output_chars": 298,
+      "latency_ms": 0.04,
+      "pass_latency": true,
+      "pass_no_syntax_noise": true,
+      "pass_plugin_cues": false,
+      "failures": [
+        "plugin_latex: raw math with ^/_/\\ still inside $...$"
+      ],
+      "speech_preview": "Heading: LaTeX Math Speechifier Fixture. Inline Pythagorean identity: a squared plus b squared equals c squared. Block Schrödinger form:. $$. -\\frac{\\hbar^2}{2m} \\nabla^2 \\Psi + V\\Psi = E\\Psi $$. Also",
+      "char_ratio": 1.133
+    }
+  ],
+  "summary": {
+    "passed": 7,
+    "failed": 2
+  }
+}

@@ -1,0 +1,128 @@
+{
+  "shard": 2,
+  "files": [
+    "ex_08_wasm_edge_workers.md",
+    "ex_09_nested_lists_planning.md",
+    "ex_10_security_review_notes.md",
+    "ex_11_observability_slos.md",
+    "ex_12_changelog_style_spec.md",
+    "ex_13_academic_methods.md",
+    "ex_14_customer_support_macros.md",
+    "plugin_admonition.md",
+    "plugin_mermaid.md"
+  ],
+  "results": [
+    {
+      "id": "ex_08_wasm_edge_workers",
+      "input_chars": 1382,
+      "output_chars": 965,
+      "latency_ms": 0.107,
+      "pass_latency": true,
+      "pass_no_syntax_noise": true,
+      "pass_plugin_cues": true,
+      "failures": [],
+      "speech_preview": "Heading: Deploying Voiceover WASM on Edge Workers. Edge runtimes need a tiny wasm32-unknown-unknown artifact with no filesystem or thread primitives. The WASM crate registers Mermaid before Code so di",
+      "char_ratio": 0.698
+    },
+    {
+      "id": "ex_09_nested_lists_planning",
+      "input_chars": 1401,
+      "output_chars": 1337,
+      "latency_ms": 0.27,
+      "pass_latency": true,
+      "pass_no_syntax_noise": true,
+      "pass_plugin_cues": true,
+      "failures": [],
+      "speech_preview": "Heading: Comprehensive Delivery Breakdown for Plugin Hardening. Section: Phase 1: Planning and Setup. First, Requirements Gathering Interview TTS reviewers about unlistenable syntax noise. Define benc",
+      "char_ratio": 0.954
+    },
+    {
+      "id": "ex_10_security_review_notes",
+      "input_chars": 1600,
+      "output_chars": 1473,
+      "latency_ms": 0.135,
+      "pass_latency": true,
+      "pass_no_syntax_noise": true,
+      "pass_plugin_cues": true,
+      "failures": [],
+      "speech_preview": "Heading: Security Review Notes for Markdown Voiceover Inputs. All Markdown inputs are untrusted. Parsers and plugins must never panic on malformed fences, unterminated math, or hostile table layouts. ",
+      "char_ratio": 0.921
+    },
+    {
+      "id": "ex_11_observability_slos",
+      "input_chars": 1310,
+      "output_chars": 1232,
+      "latency_ms": 0.139,
+      "pass_latency": true,
+      "pass_no_syntax_noise": true,
+      "pass_plugin_cues": true,
+      "failures": [],
+      "speech_preview": "Heading: Observability and SLO Handbook for Speech Conversion. Service level objectives focus on conversion latency, speech fidelity, and error rate. This handbook is long-form Markdown intentionally ",
+      "char_ratio": 0.94
+    },
+    {
+      "id": "ex_12_changelog_style_spec",
+      "input_chars": 1374,
+      "output_chars": 1246,
+      "latency_ms": 0.08,
+      "pass_latency": true,
+      "pass_no_syntax_noise": true,
+      "pass_plugin_cues": true,
+      "failures": [],
+      "speech_preview": "Heading: Voiceover Engine Changelog Style Specification. Release notes themselves are Markdown and therefore must convert cleanly. This specification doubles as an evaluation document exceeding one th",
+      "char_ratio": 0.907
+    },
+    {
+      "id": "ex_13_academic_methods",
+      "input_chars": 1493,
+      "output_chars": 1376,
+      "latency_ms": 0.177,
+      "pass_latency": true,
+      "pass_no_syntax_noise": true,
+      "pass_plugin_cues": true,
+      "failures": [],
+      "speech_preview": "Heading: Methods Section: Evaluating Speech Fidelity of Markdown Transformers. We evaluate whether a Markdown-to-speech transformer removes syntax noise without erasing semantic content. The corpus mi",
+      "char_ratio": 0.922
+    },
+    {
+      "id": "ex_14_customer_support_macros",
+      "input_chars": 1336,
+      "output_chars": 1247,
+      "latency_ms": 0.249,
+      "pass_latency": true,
+      "pass_no_syntax_noise": true,
+      "pass_plugin_cues": true,
+      "failures": [],
+      "speech_preview": "Heading: Customer Support Macros for Voice Agent Escalations. Support engineers paste Markdown macros into ticketing systems that voice agents later narrate to specialists. Macros must remain clear af",
+      "char_ratio": 0.933
+    },
+    {
+      "id": "plugin_admonition",
+      "input_chars": 345,
+      "output_chars": 369,
+      "latency_ms": 0.061,
+      "pass_latency": true,
+      "pass_no_syntax_noise": true,
+      "pass_plugin_cues": true,
+      "failures": [],
+      "speech_preview": "Heading: Admonition / Callout Fixture. Note callout. Backups run every six hours. Warning alert callout. Do not drop production columns without a deprecation window. Helpful tip. Prefer --dry-run befo",
+      "char_ratio": 1.07
+    },
+    {
+      "id": "plugin_mermaid",
+      "input_chars": 375,
+      "output_chars": 191,
+      "latency_ms": 0.031,
+      "pass_latency": true,
+      "pass_no_syntax_noise": true,
+      "pass_plugin_cues": true,
+      "failures": [],
+      "speech_preview": "Heading: Mermaid Diagram Fixture. Section: Flowchart. Architecture flowchart diagram. Section: Sequence. Sequence flow diagram illustration. Section: Class. Object class diagram architecture.",
+      "char_ratio": 0.509
+    }
+  ],
+  "summary": {
+    "passed": 9,
+    "failed": 0
+  }
+}

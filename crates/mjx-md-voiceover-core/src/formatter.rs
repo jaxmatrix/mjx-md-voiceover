@@ -187,6 +187,13 @@ impl SpeechFormatter {
                     out.push(' ');
                 }
             }
+            VoiceAstNode::Table { .. } => {
+                // Plugin path handles rich verbalization; bare core falls back.
+                if !out.is_empty() && !out.ends_with(' ') {
+                    out.push(' ');
+                }
+                out.push_str("Table.");
+            }
             VoiceAstNode::CustomPlugin { tag: _, payload } => {
                 out.push_str(payload);
             }
@@ -279,5 +286,13 @@ mod tests {
         let ast = VoiceAstParser::parse(md).unwrap();
         let speech = SpeechFormatter::format(&ast);
         assert_eq!(speech, "Code snippet in rust.");
+    }
+
+    #[test]
+    fn test_format_table_fallback_without_plugin() {
+        let md = "| A | B |\n| --- | --- |\n| 1 | 2 |\n";
+        let ast = VoiceAstParser::parse(md).unwrap();
+        let speech = SpeechFormatter::format(&ast);
+        assert_eq!(speech, "Table.");
     }
 }

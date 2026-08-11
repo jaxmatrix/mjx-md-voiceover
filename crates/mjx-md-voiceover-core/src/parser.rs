@@ -45,6 +45,23 @@ enum Frame<'a> {
         language: Option<&'a str>,
         code_buf: String,
     },
+    /// GFM table container; headers/rows filled by nested head/row frames.
+    Table {
+        headers: Vec<Vec<VoiceAstNode<'a>>>,
+        rows: Vec<Vec<Vec<VoiceAstNode<'a>>>>,
+    },
+    /// Header section: cells only (pulldown-cmark does not wrap them in `TableRow`).
+    TableHead {
+        cells: Vec<Vec<VoiceAstNode<'a>>>,
+    },
+    /// Body row of cells.
+    TableRow {
+        cells: Vec<Vec<VoiceAstNode<'a>>>,
+    },
+    /// Single header or body cell (inline children).
+    TableCell {
+        children: Vec<VoiceAstNode<'a>>,
+    },
 }
 
 impl<'a> Frame<'a> {
@@ -56,7 +73,8 @@ impl<'a> Frame<'a> {
             | Frame::Emphasis { children }
             | Frame::Strong { children }
             | Frame::BlockQuote { children }
-            | Frame::Link { text: children, .. } => {
+            | Frame::Link { text: children, .. }
+            | Frame::TableCell { children } => {
                 children.push(child);
             }
             Frame::List { items, .. } => {
@@ -67,6 +85,18 @@ impl<'a> Frame<'a> {
                     code_buf.push_str(text);
                 }
             }
+            Frame::Table { .. } | Frame::TableHead { .. } | Frame::TableRow { .. } => {
+                // Structural frames receive cells via `add_cell`, not free children.
+            }
+        }
+    }
+
+    fn add_cell(&mut self, cell: Vec<VoiceAstNode<'a>>) {
+        match self {
+            Frame::TableHead { cells } | Frame::TableRow { cells } => {
+                cells.push(cell);
+            }
+            _ => {}
         }
     }
 }
@@ -177,44 +207,99 @@ impl VoiceAstParser {
                             code_buf: String::new(),
                         });
                     }
+                    Tag::Table(_alignments) => {
+                        stack.push(Frame::Table {
+                            headers: Vec::new(),
+                            rows: Vec::new(),
+                        });
+                    }
+                    Tag::TableHead => {
+                        stack.push(Frame::TableHead { cells: Vec::new() });
+                    }
+                    Tag::TableRow => {
+                        stack.push(Frame::TableRow { cells: Vec::new() });
+                    }
+                    Tag::TableCell => {
+                        stack.push(Frame::TableCell {
+                            children: Vec::new(),
+                        });
+                    }
                     _ => {}
                 },
                 Event::End(_tag_end) => {
-                    if let Some(frame) = stack.pop() {
-                        let completed_node = match frame {
-                            Frame::Heading { level, children } => {
-                                VoiceAstNode::Heading { level, children }
-                            }
-                            Frame::Paragraph { children } => VoiceAstNode::Paragraph { children },
-                            Frame::List {
-                                ordered,
-                                start,
-                                items,
-                            } => VoiceAstNode::List {
-                                ordered,
-                                start,
-                                items,
-                            },
-                            Frame::ListItem { children } => VoiceAstNode::ListItem { children },
-                            Frame::Emphasis { children } => VoiceAstNode::Emphasis { children },
-                            Frame::Strong { children } => VoiceAstNode::Strong { children },
-                            Frame::BlockQuote { children } => VoiceAstNode::BlockQuote { children },
-                            Frame::Link { text, url, title } => {
-                                VoiceAstNode::Link { text, url, title }
-                            }
-                            Frame::CodeBlock { language, code_buf } => {
-                                let code_slice: &'a str = Box::leak(code_buf.into_boxed_str());
-                                VoiceAstNode::CodeBlock {
-                                    language,
-                                    code: code_slice,
-                                }
-                            }
-                        };
+                    let Some(frame) = stack.pop() else {
+                        continue;
+                    };
 
-                        if let Some(parent) = stack.last_mut() {
-                            parent.add_child(completed_node);
-                        } else {
-                            ast.push(completed_node);
+                    // Table structural frames fold into the parent without emitting a node.
+                    match frame {
+                        Frame::TableCell { children } => {
+                            if let Some(parent) = stack.last_mut() {
+                                parent.add_cell(children);
+                            }
+                            continue;
+                        }
+                        Frame::TableHead { cells } => {
+                            if let Some(Frame::Table { headers, .. }) = stack.last_mut() {
+                                *headers = cells;
+                            }
+                            continue;
+                        }
+                        Frame::TableRow { cells } => {
+                            if let Some(Frame::Table { rows, .. }) = stack.last_mut() {
+                                rows.push(cells);
+                            }
+                            continue;
+                        }
+                        frame => {
+                            let completed_node = match frame {
+                                Frame::Heading { level, children } => {
+                                    VoiceAstNode::Heading { level, children }
+                                }
+                                Frame::Paragraph { children } => {
+                                    VoiceAstNode::Paragraph { children }
+                                }
+                                Frame::List {
+                                    ordered,
+                                    start,
+                                    items,
+                                } => VoiceAstNode::List {
+                                    ordered,
+                                    start,
+                                    items,
+                                },
+                                Frame::ListItem { children } => VoiceAstNode::ListItem { children },
+                                Frame::Emphasis { children } => VoiceAstNode::Emphasis { children },
+                                Frame::Strong { children } => VoiceAstNode::Strong { children },
+                                Frame::BlockQuote { children } => {
+                                    VoiceAstNode::BlockQuote { children }
+                                }
+                                Frame::Link { text, url, title } => {
+                                    VoiceAstNode::Link { text, url, title }
+                                }
+                                Frame::CodeBlock { language, code_buf } => {
+                                    let code_slice: &'a str = Box::leak(code_buf.into_boxed_str());
+                                    VoiceAstNode::CodeBlock {
+                                        language,
+                                        code: code_slice,
+                                    }
+                                }
+                                Frame::Table { headers, rows } => {
+                                    VoiceAstNode::Table { headers, rows }
+                                }
+                                Frame::TableCell { .. }
+                                | Frame::TableHead { .. }
+                                | Frame::TableRow { .. } => {
+                                    // Handled above; unreachable for exhaustiveness.
+                                    continue;
+                                }
+                            };
+
+                            if let Some(parent) = stack.last_mut() {
+                                parent.add_child(completed_node);
+                            } else {
+                                ast.push(completed_node);
+                            }
                         }
                     }
                 }
@@ -370,5 +455,38 @@ mod tests {
         } else {
             panic!("Expected CodeBlock node");
         }
+    }
+
+    #[test]
+    fn test_parse_gfm_table() {
+        let md = "| Name | Age |\n| --- | --- |\n| Ada | 36 |\n| Bob | 28 |\n";
+        let ast = VoiceAstParser::parse(md).expect("Parsing failed");
+
+        assert_eq!(ast.nodes.len(), 1);
+        match &ast.nodes[0] {
+            VoiceAstNode::Table { headers, rows } => {
+                assert_eq!(headers.len(), 2);
+                assert_eq!(headers[0], vec![VoiceAstNode::Text { text: "Name" }]);
+                assert_eq!(headers[1], vec![VoiceAstNode::Text { text: "Age" }]);
+                assert_eq!(rows.len(), 2);
+                assert_eq!(rows[0][0], vec![VoiceAstNode::Text { text: "Ada" }]);
+                assert_eq!(rows[0][1], vec![VoiceAstNode::Text { text: "36" }]);
+                assert_eq!(rows[1][0], vec![VoiceAstNode::Text { text: "Bob" }]);
+                assert_eq!(rows[1][1], vec![VoiceAstNode::Text { text: "28" }]);
+            }
+            _ => panic!("Expected Table node"),
+        }
+    }
+
+    #[test]
+    fn test_prose_with_pipes_is_not_a_table() {
+        let md = "Use a | b - c in prose.";
+        let ast = VoiceAstParser::parse(md).expect("Parsing failed");
+        assert!(
+            !ast.nodes
+                .iter()
+                .any(|n| matches!(n, VoiceAstNode::Table { .. })),
+            "pipe/hyphen prose must not become a Table AST node"
+        );
     }
 }

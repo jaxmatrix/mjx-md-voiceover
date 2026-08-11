@@ -14,5 +14,11 @@ crate-type = ["cdylib"]
 
 [dependencies]
 mjx-md-voiceover-core = { path = "../mjx-md-voiceover-core" }
-pyo3 = { version = "0.23", features = ["extension-module", "auto-initialize"] }
+# `extension-module` is opt-in via the crate feature below so `cargo test`
+# can link libpython; maturin enables it when building the wheel.
+pyo3 = { version = "0.23", features = ["auto-initialize"] }
 serde_json.workspace = true
+
+[features]
+default = []
+extension-module = ["pyo3/extension-module"]

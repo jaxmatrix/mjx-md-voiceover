@@ -14,6 +14,7 @@ This document specifies how raw Markdown syntax tokens map to speech-friendly te
 | `` `code` ``                   | Reads "Backtick code backtick"                        | `code` (spoken clearly)                          |
 | `> Quote`                      | Reads "Greater than Quote"                            | `Quote: Quote.`                                  |
 | `---`                          | Reads "Hyphen hyphen hyphen"                          | `[Pause]` (transitional pause)                   |
+| GFM table (`\| A \| B \|` …)   | Reads pipes, dashes, and cells as raw symbols         | `Table with columns A and B. N data rows. Row 1: ….` (via `TablePlugin`; core fallback `Table.`) |
 
 ## Pacing and Punctuation Injection
 

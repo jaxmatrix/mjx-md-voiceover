@@ -4,7 +4,9 @@
 //! Targets `wasm32-unknown-unknown` for Web browsers, Node.js, Cloudflare Workers, and Deno.
 
 use mjx_md_voiceover_core::{PluginRegistry, SpeechFormatter, VoiceAstParser};
-use mjx_md_voiceover_plugins::{AdmonitionPlugin, CodeBlockPlugin, LatexMathPlugin, MermaidPlugin};
+use mjx_md_voiceover_plugins::{
+    AdmonitionPlugin, CodeBlockPlugin, LatexMathPlugin, MermaidPlugin, TablePlugin,
+};
 use wasm_bindgen::prelude::*;
 
 /// Builds the plugin set the browser bindings run with.
@@ -13,16 +15,16 @@ use wasm_bindgen::prelude::*;
 /// `CodeBlockPlugin` claims *every* fenced block — including `mermaid` ones — so
 /// registering it first would silently mask `MermaidPlugin` entirely.
 ///
-/// `TablePlugin` is deliberately absent. It matches any text run containing both
-/// a pipe and a hyphen and always emits a fixed "Structured data table.", which
-/// would swallow ordinary prose; GFM tables also do not yet form frames in the
-/// parser, so it cannot produce a correct readout regardless.
+/// `TablePlugin` is registered here; it only matches `VoiceAstNode::Table` (and
+/// `CustomPlugin { tag: "table" }`), so ordinary prose with `|` / `-` is safe.
+/// Note: the Python binding still uses core-only `parse_and_format` (no plugins).
 fn registry() -> PluginRegistry {
     let mut registry = PluginRegistry::new();
     registry.register(MermaidPlugin::new());
     registry.register(CodeBlockPlugin::new());
     registry.register(LatexMathPlugin::new());
     registry.register(AdmonitionPlugin::new());
+    registry.register(TablePlugin::new());
     registry
 }
 
@@ -112,5 +114,16 @@ mod tests {
         assert!(res.is_ok());
         let json = res.unwrap();
         assert!(json.contains("Heading"));
+    }
+
+    #[test]
+    fn test_wasm_gfm_table_plugin() {
+        let md = "| Name | Age |\n| --- | --- |\n| Ada | 36 |\n";
+        assert_eq!(
+            convert_markdown_to_voiceover(md).unwrap(),
+            "Table with columns Name and Age. 1 data row. Row 1: Ada, 36."
+        );
+        // Core-only path has no TablePlugin — short fallback.
+        assert_eq!(convert_markdown_core_only(md).unwrap(), "Table.");
     }
 }

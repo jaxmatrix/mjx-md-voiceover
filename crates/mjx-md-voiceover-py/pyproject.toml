@@ -28,4 +28,4 @@ classifiers = [
 
 [tool.maturin]
 module-name = "mjx_md_voiceover_py"
-features = ["pyo3/extension-module"]
+features = ["extension-module"]

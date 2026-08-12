@@ -121,6 +121,16 @@ pub enum VoiceAstNode<'a> {
     HardBreak,
     /// Horizontal rule / thematic break (`---`).
     ThematicBreak,
+    /// GFM pipe table (`| Col | … |` with separator row).
+    ///
+    /// `headers` is one cell per column (inline children). `rows` is body rows,
+    /// each a list of cells, each cell a list of inline children.
+    Table {
+        /// Header row cells (left-to-right).
+        headers: Vec<Vec<VoiceAstNode<'a>>>,
+        /// Body rows; each row is a list of cells.
+        rows: Vec<Vec<Vec<VoiceAstNode<'a>>>>,
+    },
     /// Specialized plugin extension node.
     CustomPlugin {
         /// Plugin unique identifier tag.

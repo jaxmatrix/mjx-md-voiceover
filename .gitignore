@@ -35,3 +35,6 @@ dist-js/
 /bench_results/
 eval_pairs/audio_outputs/
 *.wav
+
+# Capability eval runner build
+eval_pairs/tools/target/

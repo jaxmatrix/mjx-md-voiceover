@@ -1,0 +1,102 @@
+{
+  "shard": 3,
+  "files": [
+    "ex_15_rfc_style_protocol.md",
+    "ex_16_data_dictionary.md",
+    "ex_17_onboarding_tutorial.md",
+    "ex_18_perf_regression_diary.md",
+    "ex_19_mixed_domain_handbook.md",
+    "ex_20_release_readiness_checklist.md",
+    "plugin_table.md"
+  ],
+  "results": [
+    {
+      "id": "ex_15_rfc_style_protocol",
+      "input_chars": 1464,
+      "output_chars": 1316,
+      "latency_ms": 0.036,
+      "pass_latency": true,
+      "pass_no_syntax_noise": true,
+      "pass_plugin_cues": true,
+      "failures": [],
+      "speech_preview": "Heading: Draft: Voiceover Conversion Protocol Considerations. This informal RFC-style note describes interoperability expectations for clients calling Markdown voiceover services over HTTP or in-proce",
+      "char_ratio": 0.899
+    },
+    {
+      "id": "ex_16_data_dictionary",
+      "input_chars": 1477,
+      "output_chars": 1090,
+      "latency_ms": 0.037,
+      "pass_latency": true,
+      "pass_no_syntax_noise": true,
+      "pass_plugin_cues": true,
+      "failures": [],
+      "speech_preview": "Heading: Data Dictionary for Voice Session Analytics. Analytics warehouses store conversion metrics for capacity and fidelity reporting. This dictionary uses tables heavily and includes surrounding pr",
+      "char_ratio": 0.738
+    },
+    {
+      "id": "ex_17_onboarding_tutorial",
+      "input_chars": 1412,
+      "output_chars": 1359,
+      "latency_ms": 0.021,
+      "pass_latency": true,
+      "pass_no_syntax_noise": true,
+      "pass_plugin_cues": true,
+      "failures": [],
+      "speech_preview": "Heading: Onboarding Tutorial: First Voiceover Integration. Welcome engineers joining the voiceover guild. This tutorial walks through converting Markdown locally, registering plugins correctly, and va",
+      "char_ratio": 0.962
+    },
+    {
+      "id": "ex_18_perf_regression_diary",
+      "input_chars": 1339,
+      "output_chars": 1139,
+      "latency_ms": 0.016,
+      "pass_latency": true,
+      "pass_no_syntax_noise": true,
+      "pass_plugin_cues": true,
+      "failures": [],
+      "speech_preview": "Heading: Performance Regression Diary — August 2026. This diary captures narrative context around latency spikes observed while hardening table support. It intentionally includes code, tables, and cal",
+      "char_ratio": 0.851
+    },
+    {
+      "id": "ex_19_mixed_domain_handbook",
+      "input_chars": 1227,
+      "output_chars": 1144,
+      "latency_ms": 0.021,
+      "pass_latency": true,
+      "pass_no_syntax_noise": true,
+      "pass_plugin_cues": true,
+      "failures": [],
+      "speech_preview": "Heading: Mixed-Domain Handbook for Voice Agent Demos. Demo scripts need a single Markdown document that exercises every plugin in one pass. This handbook is that document and exceeds one thousand char",
+      "char_ratio": 0.932
+    },
+    {
+      "id": "ex_20_release_readiness_checklist",
+      "input_chars": 1368,
+      "output_chars": 1242,
+      "latency_ms": 0.024,
+      "pass_latency": true,
+      "pass_no_syntax_noise": true,
+      "pass_plugin_cues": true,
+      "failures": [],
+      "speech_preview": "Heading: Release Readiness Checklist for mjx-md-voiceover 0.1.x. This checklist is the final long-form evaluation input. Completing it aloud should feel like a release manager briefing, not a reading ",
+      "char_ratio": 0.908
+    },
+    {
+      "id": "plugin_table",
+      "input_chars": 250,
+      "output_chars": 265,
+      "latency_ms": 0.008,
+      "pass_latency": true,
+      "pass_no_syntax_noise": true,
+      "pass_plugin_cues": true,
+      "failures": [],
+      "speech_preview": "Heading: GFM Table Fixture. Table with columns Service, Latency ms, and Status. 4 data rows. Row 1: core, 0.4, ok. Row 2: wasm, 0.9, ok. Row 3: python, 1.2, ok. And 1 more row. Prose with pipe and hyp",
+      "char_ratio": 1.06
+    }
+  ],
+  "summary": {
+    "passed": 7,
+    "failed": 0
+  }
+}

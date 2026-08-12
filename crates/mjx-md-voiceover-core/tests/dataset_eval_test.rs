@@ -1,5 +1,7 @@
 use mjx_md_voiceover_core::{parse_and_format, PluginRegistry, SpeechFormatter, VoiceAstParser};
-use mjx_md_voiceover_plugins::{AdmonitionPlugin, CodeBlockPlugin, LatexMathPlugin};
+use mjx_md_voiceover_plugins::{
+    AdmonitionPlugin, CodeBlockPlugin, LatexMathPlugin, MermaidPlugin, TablePlugin,
+};
 use std::fs;
 use std::time::Instant;
 
@@ -8,10 +10,13 @@ fn test_markdown_dataset_conversion_and_benchmarks() {
     let dataset_dir = concat!(env!("CARGO_MANIFEST_DIR"), "/tests/dataset");
     let entries = fs::read_dir(dataset_dir).expect("Failed to read dataset directory");
 
+    // Mermaid before Code (first-match-wins); Table last (structural match only).
     let mut registry = PluginRegistry::new();
+    registry.register(MermaidPlugin::new());
     registry.register(CodeBlockPlugin::new());
     registry.register(LatexMathPlugin::new());
     registry.register(AdmonitionPlugin::new());
+    registry.register(TablePlugin::new());
 
     let mut test_count = 0;
 

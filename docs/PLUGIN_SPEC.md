@@ -35,6 +35,14 @@ pub trait VoicePlugin: Send + Sync {
    - Intercepts blockquotes with callout markers (`> [!NOTE]`, `> [!WARNING]`).
    - Generates auditory cue prefixes: `"Important note: ..."` or `"Warning: ..."`.
 
+4. **Table Verbalizer Plugin (`TablePlugin`)**
+   - Intercepts parsed GFM `VoiceAstNode::Table` nodes (and `CustomPlugin { tag: "table" }`).
+   - Does **not** match ordinary prose that merely contains `|` or `-`.
+   - Speaks a deterministic summary, e.g.
+     `"Table with columns Name and Age. 2 data rows. Row 1: Ada, 36. Row 2: Bob, 28."`
+   - Caps spoken body rows at 3; remaining rows become `"And N more rows."`
+   - Empty tables → `"Empty table."`
+
 ## Execution Model
 
 - Plugins execute inline during the AST traversal phase.

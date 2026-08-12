@@ -1,5 +1,7 @@
 use mjx_md_voiceover_core::{PluginRegistry, SpeechFormatter, VoiceAstParser};
-use mjx_md_voiceover_plugins::{AdmonitionPlugin, CodeBlockPlugin, LatexMathPlugin};
+use mjx_md_voiceover_plugins::{
+    AdmonitionPlugin, CodeBlockPlugin, LatexMathPlugin, MermaidPlugin, TablePlugin,
+};
 use serde::{Deserialize, Serialize};
 use std::fs;
 use std::path::Path;
@@ -36,9 +38,11 @@ fn generate_input_output_eval_pairs() {
     let entries = fs::read_dir(dataset_dir).expect("Failed to read dataset directory");
 
     let mut registry = PluginRegistry::new();
+    registry.register(MermaidPlugin::new());
     registry.register(CodeBlockPlugin::new());
     registry.register(LatexMathPlugin::new());
     registry.register(AdmonitionPlugin::new());
+    registry.register(TablePlugin::new());
 
     let mut eval_pairs = Vec::new();
     let mut total_char_ratio_sum = 0.0;
